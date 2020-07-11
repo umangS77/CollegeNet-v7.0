@@ -1,1 +1,6 @@
-# CollegeNet-v7.0
+# collegenet
+
+A new Flutter project.
+
+Announcements Section added...
+Push notification service working
