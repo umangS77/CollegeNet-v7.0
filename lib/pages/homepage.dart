@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collegenet/pages/cabsharing.dart';
 import 'package:collegenet/pages/hostevent.dart';
 import 'package:collegenet/pages/profilepage.dart';
 import 'package:collegenet/services/auth.dart';
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                     onSignedOut: widget.onSignedOut,
                     user: currentUser,
                   ),
-                  ProfilePage(
+                  CabSharing(
                     auth: widget.auth,
                     onSignedOut: widget.onSignedOut,
                     user: currentUser,
@@ -127,12 +128,17 @@ class _HomePageState extends State<HomePage> {
                     auth: widget.auth,
                     onSignedOut: widget.onSignedOut,
                     user: currentUser,
-                  )
+                  ),
+                  ProfilePage(
+                    auth: widget.auth,
+                    onSignedOut: widget.onSignedOut,
+                    user: currentUser,
+                  ),
                 ],
                 controller: pageController,
                 onPageChanged: onPageChanged,
                 physics: NeverScrollableScrollPhysics()),
-                bottomNavigationBar: CupertinoTabBar(
+            bottomNavigationBar: CupertinoTabBar(
                 currentIndex: pageIndex,
                 onTap: onTap,
                 activeColor: Colors.orange[500],
@@ -140,9 +146,9 @@ class _HomePageState extends State<HomePage> {
                 items: [
                   BottomNavigationBarItem(icon: Icon(Icons.chrome_reader_mode)),
                   BottomNavigationBarItem(icon: Icon(Icons.event_note)),
-                  BottomNavigationBarItem(icon: Icon(Icons.person)),
+                  BottomNavigationBarItem(icon: Icon(Icons.directions_car)),
                   BottomNavigationBarItem(icon: Icon(Icons.announcement)),
-
+                  BottomNavigationBarItem(icon: Icon(Icons.person)),
                 ]));
   }
 }

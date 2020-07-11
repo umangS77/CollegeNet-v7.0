@@ -22,7 +22,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool load = false;
-  double randnum = 1;
+  int randnum = 1;
   String filepath;
   int temp;
 
@@ -31,8 +31,9 @@ class _ProfilePageState extends State<ProfilePage> {
     //  getUserById();
     super.initState();
     temp = widget.user.id.codeUnitAt(0);
-    randnum += ((temp - 48) / 12);
+    randnum = 1 + (temp - 48);
     temp = randnum.ceil();
+    // print(temp);
     filepath = 'assets/images/avatars/av$temp.png';
   }
   // getUserById() async {

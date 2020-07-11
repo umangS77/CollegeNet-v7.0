@@ -1,3 +1,4 @@
+import 'package:collegenet/services/loading.dart';
 import 'package:flutter/material.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/events_grid.dart';
@@ -66,8 +67,11 @@ class _EventOverviewState extends State<EventOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffe2ded3),
       appBar: AppBar(
+        backgroundColor: Color(0xff1a2639),
         title: Text('Live Events'),
+        centerTitle: true,
         actions: <Widget>[
           PopupMenuButton(
             onSelected: (FilterOptions selectedvalue) {
@@ -94,7 +98,7 @@ class _EventOverviewState extends State<EventOverview> {
       drawer: AppDrawer(),
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: circularProgress(),
             )
           : EventsGrid(_showOnlyGoingOnes),
     );
