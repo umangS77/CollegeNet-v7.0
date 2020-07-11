@@ -9,11 +9,10 @@ import 'package:collegenet/widgets/announcementpost.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/loading.dart';
 
-
 QuerySnapshot snapshot;
 String init = "";
 int cnt = 0;
-String pageName="";
+String pageName = "";
 
 class Announcements extends StatefulWidget {
   Announcements({
@@ -37,20 +36,21 @@ class _AnnouncementsState extends State<Announcements> {
     setState(() {
       isLoading = true;
     });
-    snapshot =
-    await announcementRef.where("college", isEqualTo: currentUser.college).getDocuments();
+    snapshot = await announcementRef
+        .where("college", isEqualTo: currentUser.college)
+        .getDocuments();
     setState(() {
       isLoading = false;
       init = "";
     });
   }
+
   buildannouncementposts(String query) {
     posts.clear();
     query = query.toLowerCase();
     List<Widget> announcementposts = [];
     List<DocumentSnapshot> list = [], l = snapshot.documents;
-    if (query != "")
-    {
+    if (query != "") {
       list.clear();
       String cap;
       for (var i = 0; i < l.length; i++) {
@@ -59,8 +59,7 @@ class _AnnouncementsState extends State<Announcements> {
           list.add(l[i]);
         }
       }
-    }
-    else {
+    } else {
       list = l;
     }
     for (var i = 0; i < list.length; i++) {
@@ -105,9 +104,7 @@ class _AnnouncementsState extends State<Announcements> {
 
   handlePost(BuildContext parentContext) {
     return showDialog(
-        context: parentContext,
-        builder: (context) => AddAnnouncement()
-        );
+        context: parentContext, builder: (context) => AddAnnouncement());
   }
 
   @override
@@ -125,10 +122,10 @@ class _AnnouncementsState extends State<Announcements> {
       appBar: AppBar(
         backgroundColor: Color(0xff1a2639),
         title: Text(
-            pageName,
+          pageName,
           style: TextStyle(
-            fontFamily: 'SaucerBB',
-            fontStyle: FontStyle.italic,
+            fontFamily: 'Chelsea',
+            // fontStyle: FontStyle.italic,
           ),
         ),
         centerTitle: true,
@@ -136,11 +133,11 @@ class _AnnouncementsState extends State<Announcements> {
       body: isLoading
           ? circularProgress()
           : Container(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: buildannouncementposts(init),
-        ),
-      ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: buildannouncementposts(init),
+              ),
+            ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.black,

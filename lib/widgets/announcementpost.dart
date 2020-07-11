@@ -1,14 +1,7 @@
-import 'dart:io';
 import 'package:collegenet/pages/homepage.dart';
-import 'package:collegenet/services/loading.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:open_file/open_file.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AnnouncementPost extends StatefulWidget {
   final String postid;
@@ -98,6 +91,7 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
                       ),
                       child: ListTile(
                         leading: IconButton(
+                          onPressed: null,
                           icon: Icon(Icons.speaker_notes),
                         ),
                         title: Text(
@@ -127,15 +121,14 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
                       height: 182,
                       width: MediaQuery.of(context).size.width,
                       child: Padding(
-                        padding: EdgeInsets.only(
-                            top: 5, bottom: 5, right: 2, left: 2),
+                        padding: EdgeInsets.all(16),
                         child: Text(
                           widget.content,
                           style: TextStyle(
                             color: Colors.black,
 //                              fontWeight: FontWeight.bold,
-                            fontFamily: 'Chelsea',
-                            fontStyle: FontStyle.italic,
+                            // fontFamily: 'Chelsea',
+                            // fontStyle: FontStyle.italic,
                             fontSize: 20,
                           ),
                         ),

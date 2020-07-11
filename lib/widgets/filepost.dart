@@ -64,7 +64,7 @@ class _FilePostState extends State<FilePost> {
   String percentage;
   String dirloc =
       '/storage/emulated/0/Android/data/com.example.collegenet/files/';
-  double randnum = 1;
+  var randnum = 1;
   bool isDownloaded = false;
   bool downloading = false;
   downloadFile() async {
@@ -204,7 +204,7 @@ class _FilePostState extends State<FilePost> {
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 25,
+                    fontSize: 22,
                   ),
                 ),
                 contentPadding: EdgeInsets.all(5),
@@ -240,18 +240,20 @@ class _FilePostState extends State<FilePost> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: Color(0xff497285).withOpacity(0.15),
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(20),
               ),
               height: 144,
               width: MediaQuery.of(context).size.width,
               child: Padding(
-                padding: EdgeInsets.only(top: 16, bottom: 16),
-                child: Text(
-                  widget.content,
-                  style: TextStyle(
-                    color: Color(0xff38486f),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                child: Center(
+                  child: Text(
+                    widget.content,
+                    style: TextStyle(
+                      color: Color(0xff38486f),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
@@ -285,7 +287,7 @@ class _FilePostState extends State<FilePost> {
                     bottomRight: Radius.circular(22)),
               ),
               child: Text(
-                "Tap to Download",
+                "Tap to See More",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -310,7 +312,6 @@ class _FilePostState extends State<FilePost> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            downloading ? linearProgress() : Container(),
             Container(
               decoration: BoxDecoration(
                   color: Color(0xff1a2639),
@@ -330,6 +331,7 @@ class _FilePostState extends State<FilePost> {
               ),
             ),
             SizedBox(height: 20),
+            downloading ? linearProgress() : Container(),
             Align(
               alignment: Alignment.center,
               child: Text(
@@ -421,7 +423,10 @@ class _FilePostState extends State<FilePost> {
                           ),
                         ),
                         onTap: () async {
-                          final url = "https://" + widget.mediaUrl;
+                          String url = widget.mediaUrl;
+                          if (!url.startsWith("http")) {
+                            url = "https://" + url;
+                          }
                           if (await canLaunch(url)) {
                             await launch(url);
                           } else {
@@ -586,7 +591,7 @@ class _FilePostState extends State<FilePost> {
   @override
   Widget build(BuildContext context) {
     temp = widget.userId.codeUnitAt(0);
-    randnum = 1 + (temp - 48) / 12;
+    randnum = 1 + (temp - 48);
     temp = randnum.ceil();
     filepath = 'assets/images/avatars/av$temp.png';
     return Container(
