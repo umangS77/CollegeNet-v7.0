@@ -38,10 +38,25 @@ class _CabSharingState extends State<CabSharing> {
   buildCabPosts() {
     posts.clear();
     List<Widget> cabposts = [];
-    // List<DocumentSnapshot> l = snapshot.documents;
-
-    posts =
-        snapshot.documents.map((doc) => CabPosts.fromDocument(doc)).toList();
+    List<DocumentSnapshot> l = snapshot.documents;
+    for (var i = 0; i < l.length; i++) {
+      posts.add(CabPosts(
+        postId: l[i].data['postId'],
+        userId: l[i].data['userId'],
+        username: l[i].data['username'],
+        destination: l[i].data['destination'],
+        source: l[i].data['source'],
+        facebook: l[i].data['facebook'],
+        college: l[i].data['college'],
+        count: l[i].data['count'],
+        leavetime: l[i].data['leavetime'],
+        contact: l[i].data['contact'],
+        users: l[i].data['users'],
+        rebuild: getCabposts,
+      ));
+    }
+    // posts =
+    // snapshot.documents.map((doc) => CabPosts.fromDocument(doc)).toList();
     for (var i = 0; i < posts.length; i++) {
       if (posts[i] != null) {
         cabposts.add(posts[i]);
@@ -175,7 +190,9 @@ class _CabSharingState extends State<CabSharing> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddCab(),
+              builder: (context) => AddCab(
+                rebuild: getCabposts,
+              ),
             ),
           );
         },

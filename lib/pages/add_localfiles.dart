@@ -15,6 +15,10 @@ String cnt = "No file chosen";
 class AddLocalFile extends StatefulWidget {
   // AddLocalFile({this.currentUser});
   // final User currentUser;
+  final VoidCallback rebuild;
+  AddLocalFile({
+    this.rebuild,
+  });
   @override
   _AddLocalFileState createState() => _AddLocalFileState();
 }
@@ -107,6 +111,7 @@ class _AddLocalFileState extends State<AddLocalFile> {
       contentControl.clear();
       linkControl.clear();
     });
+    widget.rebuild();
     Navigator.pop(context);
   }
 
@@ -149,7 +154,7 @@ class _AddLocalFileState extends State<AddLocalFile> {
         ? circularProgress()
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.orange[800],
+              backgroundColor: Color(0xff1a2639),
               title: Text(
                 'Upload files',
                 style: TextStyle(
@@ -162,12 +167,14 @@ class _AddLocalFileState extends State<AddLocalFile> {
             body: SingleChildScrollView(
               child: Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.91,
+                height: 900,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topCenter,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                     colors: [
                       Colors.cyan[100],
+                      Colors.blue[100],
                       Colors.orange[300],
                     ],
                   ),

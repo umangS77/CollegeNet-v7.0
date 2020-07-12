@@ -16,6 +16,7 @@ class CabPosts extends StatefulWidget {
     this.facebook,
     this.contact,
     this.users,
+    this.rebuild,
   });
   final Timestamp leavetime;
   final String postId;
@@ -28,6 +29,7 @@ class CabPosts extends StatefulWidget {
   final String userId;
   final int count;
   final String users;
+  final VoidCallback rebuild;
 
   factory CabPosts.fromDocument(DocumentSnapshot doc) {
     return new CabPosts(
@@ -73,15 +75,12 @@ class _CabPostsState extends State<CabPosts> {
   ];
 
   deleteFilePost() async {
-    cabPostsRef.document(widget.postId).get().then((doc) {
+    await cabPostsRef.document(widget.postId).get().then((doc) {
       if (doc.exists) {
         doc.reference.delete();
       }
     });
-    snapshot = await cabPostsRef
-        .where("college", isEqualTo: currentUser.college)
-        .getDocuments();
-    buildPostHeader();
+    widget.rebuild();
   }
 
   handleDeleteFilePost(BuildContext parentContext) {

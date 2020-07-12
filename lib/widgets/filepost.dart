@@ -24,6 +24,7 @@ class FilePost extends StatefulWidget {
   final bool isLocal;
   final bool isFile;
   final String fileExtension;
+  final VoidCallback rebuild;
 
   FilePost({
     this.postId,
@@ -36,6 +37,7 @@ class FilePost extends StatefulWidget {
     this.isLocal,
     this.fileExtension,
     this.isFile,
+    this.rebuild,
   });
   factory FilePost.fromDocument(DocumentSnapshot doc) {
     return new FilePost(
@@ -491,13 +493,13 @@ class _FilePostState extends State<FilePost> {
     );
   }
 
-  deleteFilePost() {
-    localPostsRef.document(widget.postId).get().then((doc) {
+  deleteFilePost() async {
+    await localPostsRef.document(widget.postId).get().then((doc) {
       if (doc.exists) {
         doc.reference.delete();
       }
     });
-    userWisePostsRef
+    await userWisePostsRef
         .document(userId)
         .collection("posts")
         .document(widget.postId)
@@ -507,12 +509,15 @@ class _FilePostState extends State<FilePost> {
         doc.reference.delete();
       }
     });
-    storageRef
-        .child("post_${widget.postId}" + "${widget.fileExtension}")
-        .delete();
+    widget.rebuild();
+    if (widget.isFile) {
+      await storageRef
+          .child("post_${widget.postId}" + "${widget.fileExtension}")
+          .delete();
+    }
   }
 
-  handleDeleteFilePost(BuildContext parentContext) {
+  handleDeleteFilePost(BuildContext parentContext) async {
     return showDialog(
         context: parentContext,
         builder: (context) {
@@ -543,6 +548,7 @@ class _FilePostState extends State<FilePost> {
                               isLocal: widget.isLocal,
                               isFile: widget.isFile,
                               fileExtension: widget.fileExtension,
+                              rebuild: widget.rebuild,
                             )),
                   );
                 },
