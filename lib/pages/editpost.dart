@@ -25,6 +25,7 @@ class EditPost extends StatefulWidget {
     this.isLocal,
     this.fileExtension,
     this.isFile,
+    this.rebuild,
   });
   final String postId;
   final String caption;
@@ -33,6 +34,7 @@ class EditPost extends StatefulWidget {
   final bool isLocal;
   final bool isFile;
   final String fileExtension;
+  final VoidCallback rebuild;
 
   @override
   _EditPostState createState() => _EditPostState();
@@ -169,6 +171,7 @@ class _EditPostState extends State<EditPost> {
       contentControl.clear();
       linkControl.clear();
     });
+    widget.rebuild();
     Navigator.pop(context);
   }
 
@@ -406,7 +409,7 @@ class _EditPostState extends State<EditPost> {
                                     });
                                     bool isSubmit =
                                         !(isEmptyDes | isEmptyTitle);
-                                    if(!toggleValue){
+                                    if (!toggleValue) {
                                       isSubmit = isSubmit & !isEmptyLink;
                                     }
                                     if ((file != null) & isSubmit) {

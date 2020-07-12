@@ -113,7 +113,6 @@ class _HomePageState extends State<HomePage> {
                     onSignedOut: widget.onSignedOut,
                     user: currentUser,
                   ),
-                  // ActiveEvents(),
                   HostEvent(
                     auth: widget.auth,
                     onSignedOut: widget.onSignedOut,

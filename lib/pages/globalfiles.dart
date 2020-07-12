@@ -38,11 +38,34 @@ class _GlobalFilesState extends State<GlobalFiles> {
   bool isLoading = false;
   List<FilePost> posts = [];
   TextEditingController searchControl = TextEditingController();
+  rebuildfileposts() {
+    print("working");
+    switch (status) {
+      case PageType.localPage:
+        getLocalFileposts();
+        break;
+      case PageType.editPage:
+        getMyFileposts();
+        break;
+      case PageType.globalPage:
+        getGlobalFileposts();
+        break;
+      default:
+        getLocalFileposts();
+    }
+    print("ok here");
+    setState(() {
+      init = "";
+    });
+    print(snapshot.documents);
+  }
+
   buildfileposts(String query) {
     posts.clear();
     query = query.toLowerCase();
     List<Widget> fileposts = [];
     List<DocumentSnapshot> list = [], l = snapshot.documents;
+    print("ok2");
     if (query != "") {
       list.clear();
       String cap;
@@ -55,6 +78,8 @@ class _GlobalFilesState extends State<GlobalFiles> {
     } else {
       list = l;
     }
+    print("ok3");
+    fileposts.clear();
     for (var i = 0; i < list.length; i++) {
       posts.add(FilePost(
         caption: list[i].data['caption'],
@@ -67,6 +92,7 @@ class _GlobalFilesState extends State<GlobalFiles> {
         postId: list[i].data['postId'],
         userId: list[i].data['userId'],
         username: list[i].data['username'],
+        rebuild: rebuildfileposts,
       ));
     }
     if (posts.length == 0) {
@@ -100,6 +126,7 @@ class _GlobalFilesState extends State<GlobalFiles> {
         // print(posts[i].caption);
       }
     }
+    print("ok4");
     return Column(
       children: fileposts,
     );
@@ -119,7 +146,9 @@ class _GlobalFilesState extends State<GlobalFiles> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddGlobalFile(),
+                      builder: (context) => AddGlobalFile(
+                        rebuild: rebuildfileposts,
+                      ),
                     ),
                   );
                 },
@@ -134,7 +163,9 @@ class _GlobalFilesState extends State<GlobalFiles> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddLocalFile(),
+                      builder: (context) => AddLocalFile(
+                        rebuild: rebuildfileposts,
+                      ),
                     ),
                   );
                 },

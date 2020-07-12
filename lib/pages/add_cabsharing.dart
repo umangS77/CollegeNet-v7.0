@@ -9,6 +9,8 @@ import 'package:uuid/uuid.dart';
 import 'cabsharing.dart';
 
 class AddCab extends StatefulWidget {
+  AddCab({this.rebuild});
+  final VoidCallback rebuild;
   @override
   _AddCabState createState() => _AddCabState();
 }
@@ -50,6 +52,7 @@ class _AddCabState extends State<AddCab> {
       isUploading = false;
       postId = Uuid().v4();
     });
+    widget.rebuild();
     Navigator.pop(context);
   }
 

@@ -15,6 +15,10 @@ String cnt = "No file chosen";
 class AddGlobalFile extends StatefulWidget {
   // AddGlobalFile({this.currentUser});
   // final User currentUser;
+  final VoidCallback rebuild;
+  AddGlobalFile({
+    this.rebuild,
+  });
   @override
   _AddGlobalFileState createState() => _AddGlobalFileState();
 }
@@ -79,7 +83,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
       "isLocal": false,
       "isFile": isFile,
       "fileExtension": fileExtension,
-      "isApproved":false,
+      "isApproved": false,
     });
     userWisePostsRef
         .document(userId)
@@ -96,7 +100,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
       "isFile": isFile,
       "isLocal": false,
       "fileExtension": fileExtension,
-      "isApproved":false,
+      "isApproved": false,
     });
     setState(() {
       file = null;
@@ -106,6 +110,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
       contentControl.clear();
       linkControl.clear();
     });
+    widget.rebuild();
     Navigator.pop(context);
   }
 
@@ -148,7 +153,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
         ? circularProgress()
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.orange[800],
+              backgroundColor: Color(0xff1a2639),
               title: Text(
                 'Upload files',
                 style: TextStyle(
@@ -161,12 +166,14 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
             body: SingleChildScrollView(
               child: Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.91,
+                height: 900,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topCenter,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                     colors: [
                       Colors.cyan[100],
+                      Colors.blue[100],
                       Colors.orange[300],
                     ],
                   ),
