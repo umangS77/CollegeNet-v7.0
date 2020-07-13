@@ -11,6 +11,7 @@ class AnnouncementPost extends StatefulWidget {
   final String content;
   final String college;
   final String target;
+  final VoidCallback rebuild;
   AnnouncementPost({
     this.postid,
     this.userId,
@@ -19,6 +20,7 @@ class AnnouncementPost extends StatefulWidget {
     this.content,
     this.college,
     this.target,
+    this.rebuild,
   });
   factory AnnouncementPost.fromDocument(DocumentSnapshot doc) {
     return new AnnouncementPost(
@@ -147,13 +149,13 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
     );
   }
 
-  deleteAnnouncementPost() {
-    announcementRef.document(widget.postid).get().then((doc) {
+  deleteAnnouncementPost() async {
+    await announcementRef.document(widget.postid).get().then((doc) {
       if (doc.exists) {
         doc.reference.delete();
       }
     });
-    userWisePostsRef
+    await userWisePostsRef
         .document(userId)
         .collection("announcements")
         .document(widget.postid)
@@ -163,6 +165,7 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
         doc.reference.delete();
       }
     });
+    widget.rebuild();
   }
 
   handleDeleteAnnouncement(BuildContext parentContext) {

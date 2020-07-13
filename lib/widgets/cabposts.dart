@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collegenet/pages/cabsharing.dart';
 import 'package:collegenet/pages/homepage.dart';
+import 'package:collegenet/providers/allgrps.dart';
+import 'package:collegenet/providers/cabgrp.dart';
 import 'package:flutter/material.dart';
+import '../screens/chat_screen.dart';
+import 'package:provider/provider.dart';
 
 class CabPosts extends StatefulWidget {
+  static const routeName = '/cabpost';
   CabPosts({
     this.postId,
     this.username,
@@ -16,6 +21,8 @@ class CabPosts extends StatefulWidget {
     this.facebook,
     this.contact,
     this.users,
+    this.chatRoomId,
+    this.rebuild,
   });
   final Timestamp leavetime;
   final String postId;
@@ -28,7 +35,8 @@ class CabPosts extends StatefulWidget {
   final String userId;
   final int count;
   final String users;
-
+  final String chatRoomId;
+  final VoidCallback rebuild;
   factory CabPosts.fromDocument(DocumentSnapshot doc) {
     return new CabPosts(
       postId: doc['postId'],
@@ -42,6 +50,7 @@ class CabPosts extends StatefulWidget {
       leavetime: doc['leavetime'],
       contact: doc['contact'],
       users: doc['users'],
+      chatRoomId: doc['chatRoomId'],
     );
   }
   @override
@@ -71,17 +80,23 @@ class _CabPostsState extends State<CabPosts> {
     'Nov',
     'Dec'
   ];
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   deleteFilePost() async {
-    cabPostsRef.document(widget.postId).get().then((doc) {
+    await cabPostsRef.document(widget.postId).get().then((doc) {
       if (doc.exists) {
         doc.reference.delete();
       }
     });
-    snapshot = await cabPostsRef
-        .where("college", isEqualTo: currentUser.college)
-        .getDocuments();
-    buildPostHeader();
+    widget.rebuild();
   }
 
   handleDeleteFilePost(BuildContext parentContext) {
@@ -304,8 +319,7 @@ class _CabPostsState extends State<CabPosts> {
                   children: <Widget>[
                     Text("Already Going: " + "  " + widget.count.toString()),
                     RaisedButton.icon(
-                      color: Colors.black,
-                      onPressed: null,
+                      color: Colors.white,
                       icon: Icon(
                         Icons.add_box,
                         color: Colors.black87,
@@ -316,6 +330,25 @@ class _CabPostsState extends State<CabPosts> {
                           color: Colors.black,
                         ),
                       ),
+                      onPressed: () {
+                        Provider.of<AllCabs>(context).addEvent(CabGroup(
+                          chatRoomId: widget.chatRoomId,
+                          source: widget.source,
+                          destination: widget.destination,
+                          leavetime: date + " " + time,
+                        ));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatScreen(
+                              chatRoomId: widget.chatRoomId,
+                              source: widget.source,
+                              destination: widget.destination,
+                              leavetime: date + " " + time,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

@@ -45,6 +45,13 @@ class _AnnouncementsState extends State<Announcements> {
     });
   }
 
+  rebuildannouncements() {
+    getAnnouncementPosts();
+    setState(() {
+      init = "";
+    });
+  }
+
   buildannouncementposts(String query) {
     posts.clear();
     query = query.toLowerCase();
@@ -71,8 +78,10 @@ class _AnnouncementsState extends State<Announcements> {
         userId: list[i].data['userId'],
         username: list[i].data['username'],
         target: list[i].data['target'],
+        rebuild: rebuildannouncements,
       ));
     }
+    announcementposts.clear();
     if (posts.length == 0) {
       announcementposts.add(SizedBox(
         height: 40,
@@ -104,7 +113,10 @@ class _AnnouncementsState extends State<Announcements> {
 
   handlePost(BuildContext parentContext) {
     return showDialog(
-        context: parentContext, builder: (context) => AddAnnouncement());
+        context: parentContext,
+        builder: (context) => AddAnnouncement(
+              rebuild: rebuildannouncements,
+            ));
   }
 
   @override

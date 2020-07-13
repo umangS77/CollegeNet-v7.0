@@ -9,6 +9,7 @@ class UserEventsScreen extends StatelessWidget {
   Future<void> _refreshEvents(BuildContext context) async {
     await Provider.of<Events>(context).fetchAndSetEvents();
   }
+
   @override
   Widget build(BuildContext context) {
     final evntsData = Provider.of<Events>(context);

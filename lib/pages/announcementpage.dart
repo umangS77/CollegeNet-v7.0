@@ -9,6 +9,8 @@ import 'package:flutter_icons/flutter_icons.dart';
 String cnt = "No notice";
 
 class AddAnnouncement extends StatefulWidget {
+  final VoidCallback rebuild;
+  AddAnnouncement({this.rebuild});
   @override
   _AddAnnouncementState createState() => _AddAnnouncementState();
 }
@@ -30,8 +32,8 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
     cnt = "No notice";
   }
 
-  createPostInFirestore({String caption, String content, String target}) {
-    announcementRef.document(postid).setData({
+  createPostInFirestore({String caption, String content, String target}) async {
+    await announcementRef.document(postid).setData({
       "postid": postid,
       "userId": userId,
       "username": username,
@@ -47,6 +49,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
       contentControl.clear();
       targetControl.clear();
     });
+    widget.rebuild();
     Navigator.pop(context);
   }
 

@@ -9,6 +9,10 @@ import 'package:uuid/uuid.dart';
 import 'cabsharing.dart';
 
 class AddCab extends StatefulWidget {
+  AddCab({
+    this.rebuild,
+  });
+  final VoidCallback rebuild;
   @override
   _AddCabState createState() => _AddCabState();
 }
@@ -28,11 +32,16 @@ class _AddCabState extends State<AddCab> {
       username = currentUser.username,
       college = currentUser.college;
 
-  void handleUpload() {
+  void handleUpload() async {
     setState(() {
       isUploading = true;
     });
     Timestamp leavetime = Timestamp.fromDate(finaldate);
+    final chatroom = await Firestore.instance.collection('Chat Rooms').add(
+      {
+        'created At': Timestamp.now(),
+      },
+    );
     cabPostsRef.document(postId).setData({
       "college": college,
       "facebook": "blahblah",
@@ -45,11 +54,13 @@ class _AddCabState extends State<AddCab> {
       "count": int.parse(countControl.text),
       "postId": postId,
       "users": userId,
+      "chatRoomId": chatroom.documentID,
     });
     setState(() {
       isUploading = false;
       postId = Uuid().v4();
     });
+    widget.rebuild();
     Navigator.pop(context);
   }
 

@@ -9,17 +9,17 @@ class EventsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final eventsData = Provider.of<Events>(context);
-    final events = showg ? eventsData.goingones: eventsData.items;
+    final events = showg ? eventsData.goingones : eventsData.items;
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: events.length,
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
         value: events[i],
         child: EventItem(
-          // events[i].id,
-          // events[i].title,
-          // events[i].imageURL,
-        ),
+            // events[i].id,
+            // events[i].title,
+            // events[i].imageURL,
+            ),
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

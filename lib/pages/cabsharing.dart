@@ -3,6 +3,7 @@ import 'package:collegenet/models/users.dart';
 import 'package:collegenet/pages/add_cabsharing.dart';
 import 'package:collegenet/pages/homepage.dart';
 import 'package:collegenet/services/auth.dart';
+import 'package:collegenet/widgets/appdrawer_cab.dart';
 import 'package:collegenet/widgets/cabposts.dart';
 import 'package:flutter/material.dart';
 import '../services/loading.dart';
@@ -19,6 +20,7 @@ QuerySnapshot snapshot;
 String init = "";
 
 class CabSharing extends StatefulWidget {
+  static const routeName = '/cabshare';
   CabSharing({
     this.auth,
     this.onSignedOut,
@@ -38,10 +40,24 @@ class _CabSharingState extends State<CabSharing> {
   buildCabPosts() {
     posts.clear();
     List<Widget> cabposts = [];
+    List<DocumentSnapshot> l = snapshot.documents;
+    for (var i = 0; i < l.length; i++) {
+      posts.add(CabPosts(
+        postId: l[i].data['postId'],
+        userId: l[i].data['userId'],
+        username: l[i].data['username'],
+        destination: l[i].data['destination'],
+        source: l[i].data['source'],
+        facebook: l[i].data['facebook'],
+        college: l[i].data['college'],
+        count: l[i].data['count'],
+        leavetime: l[i].data['leavetime'],
+        contact: l[i].data['contact'],
+        users: l[i].data['users'],
+        rebuild: getCabposts,
+      ));
+    }
     // List<DocumentSnapshot> l = snapshot.documents;
-
-    posts =
-        snapshot.documents.map((doc) => CabPosts.fromDocument(doc)).toList();
     for (var i = 0; i < posts.length; i++) {
       if (posts[i] != null) {
         cabposts.add(posts[i]);
@@ -91,7 +107,9 @@ class _CabSharingState extends State<CabSharing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       backgroundColor: Color(0xffe2ded3),
+      drawer: CabAppDrawer(),
       appBar: PreferredSize(
         child: Column(children: <Widget>[
           AppBar(
@@ -175,7 +193,9 @@ class _CabSharingState extends State<CabSharing> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddCab(),
+              builder: (context) => AddCab(
+                rebuild: getCabposts,
+              ),
             ),
           );
         },

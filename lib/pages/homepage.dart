@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collegenet/pages/cabsharing.dart';
+import 'package:collegenet/pages/cabhome.dart';
 import 'package:collegenet/pages/hostevent.dart';
 import 'package:collegenet/pages/profilepage.dart';
 import 'package:collegenet/services/auth.dart';
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                     onSignedOut: widget.onSignedOut,
                     user: currentUser,
                   ),
-                  CabSharing(
+                  HomeCabs(
                     auth: widget.auth,
                     onSignedOut: widget.onSignedOut,
                     user: currentUser,
