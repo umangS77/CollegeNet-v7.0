@@ -110,6 +110,35 @@ class Events with ChangeNotifier {
       throw error;
     }
   }
+  
+  Future<void> fetchAndSetOwnersEvents() async {
+    const url = 'https://collegenet-69.firebaseio.com/events.json';
+    try {
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Event2> loadedEvents = [];
+      extractedData.forEach((prodId, prodData) {
+        if(prodId == currentUser.id)
+        loadedEvents.add(Event2(
+          id: prodId,
+          title: prodData['title'],
+          noOfPraticipants: prodData['noOfPraticipants'],
+          fee: prodData['fee'],
+          startDate: prodData['startDate'],
+          endDate: prodData['endDate'],
+          startTime: prodData['startTime'],
+          endTime: prodData['endTime'],
+          isGoing: prodData['isGoing'],
+          description: prodData['description'],
+          imageURL: prodData['imageURL'],
+        ));
+      });
+      _items = loadedEvents;
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
+  }
 
   Future<void> addEvent(Event2 evnt) async {
     const url = 'https://collegenet-69.firebaseio.com/events.json';
