@@ -7,7 +7,7 @@ import '../widgets/app_drawer.dart';
 class UserEventsScreen extends StatelessWidget {
   static const routeName = '/user-products';
   Future<void> _refreshEvents(BuildContext context) async {
-    await Provider.of<Events>(context).fetchAndSetEvents();
+    await Provider.of<Events>(context).fetchAndSetOwnersEvents();
   }
   @override
   Widget build(BuildContext context) {
