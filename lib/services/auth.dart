@@ -1,7 +1,6 @@
 // import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 abstract class AuthImplementation {
   Future<String> signIn(String email, String password);
   Future<String> signUp(String email, String password);
@@ -26,14 +25,11 @@ class Auth implements AuthImplementation {
     return user.uid;
   }
 
-  Future<String> getCurrentUser() async{
+  Future<String> getCurrentUser() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
-    if(user==null)
-    {
+    if (user == null) {
       return null;
-    }
-    else
-    {
+    } else {
       return user.uid;
     }
   }
