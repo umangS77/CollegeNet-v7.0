@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class Event2 with ChangeNotifier {
   final String id;
+  final String imageId;
   final String title;
   final String description;
   final String imageURL;
@@ -14,6 +15,7 @@ class Event2 with ChangeNotifier {
   bool isGoing;
   Event2({
     @required this.id,
+    @required this.imageId,
     @required this.title,
     @required this.description,
     @required this.imageURL,

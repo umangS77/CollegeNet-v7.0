@@ -1,3 +1,5 @@
+import 'package:collegenet/pages/homepage.dart';
+import 'package:collegenet/screens/host_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -92,6 +94,7 @@ class Events with ChangeNotifier {
       extractedData.forEach((prodId, prodData) {
         loadedEvents.add(Event2(
           id: prodId,
+          imageId: prodData['imageId'],
           title: prodData['title'],
           noOfPraticipants: prodData['noOfPraticipants'],
           fee: prodData['fee'],
@@ -121,6 +124,7 @@ class Events with ChangeNotifier {
         if(prodId == currentUser.id)
         loadedEvents.add(Event2(
           id: prodId,
+          imageId: prodData['imageId'],
           title: prodData['title'],
           noOfPraticipants: prodData['noOfPraticipants'],
           fee: prodData['fee'],
@@ -147,6 +151,7 @@ class Events with ChangeNotifier {
         url,
         body: json.encode({
           'title': evnt.title,
+          'imageId': evnt.imageId,
           'description': evnt.description,
           'noOfPraticipants': evnt.noOfPraticipants,
           'imageURL': evnt.imageURL,
@@ -160,6 +165,7 @@ class Events with ChangeNotifier {
       );
       final newEvent = Event2(
         title: evnt.title,
+        imageId: evnt.imageId,
         description: evnt.description,
         endDate: evnt.endDate,
         endTime: evnt.endTime,
@@ -186,6 +192,7 @@ class Events with ChangeNotifier {
       http.patch(url,
           body: json.encode({
             'title': newEvent.title,
+            'imageId': newEvent.imageId,
             'description': newEvent.description,
             'imageURL': newEvent.imageURL,
             'startDate': newEvent.startDate,
@@ -204,6 +211,7 @@ class Events with ChangeNotifier {
     final url = 'https://collegenet-69.firebaseio.com/events/$id.json';
     final existingEventIndex = _items.indexWhere((evnt) => evnt.id == id);
     var existingEvent = _items[existingEventIndex];
+    final deletedImageId = existingEvent.imageId;
     _items.removeAt(existingEventIndex);
     notifyListeners();
     final response = await http.delete(url);
@@ -212,6 +220,22 @@ class Events with ChangeNotifier {
       notifyListeners();
       throw HttpException('Could not delete event.');
     }
+          await eventsfileRef.document(deletedImageId).get().then((doc) {
+            if (doc.exists) {
+              doc.reference.delete();
+            }
+          });
+          await userWisePostsRef
+              .document(userId)
+              .collection("eventsfile")
+              .document(deletedImageId)
+              .get()
+              .then((doc) {
+            if (doc.exists) {
+              doc.reference.delete();
+            }
+          });
+
     existingEvent = null;
   }
 }
