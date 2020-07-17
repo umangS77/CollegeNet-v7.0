@@ -57,6 +57,7 @@ class _CabSharingState extends State<CabSharing> {
         leavetime: l[i].data['leavetime'],
         contact: l[i].data['contact'],
         users: l[i].data['users'],
+        chatRoomId: l[i].data['chatRoomId'],
         rebuild: getCabposts,
       ));
     }
@@ -146,6 +147,7 @@ class _CabSharingState extends State<CabSharing> {
             leavetime: l[i].data['leavetime'],
             contact: l[i].data['contact'],
             users: l[i].data['users'],
+            chatRoomId: l[i].data['chatRoomId'],
             rebuild: getCabposts,
           ));
         }
@@ -169,6 +171,7 @@ class _CabSharingState extends State<CabSharing> {
             leavetime: l[i].data['leavetime'],
             contact: l[i].data['contact'],
             users: l[i].data['users'],
+            chatRoomId: l[i].data['chatRoomId'],
             rebuild: getCabposts,
           ));
         }
