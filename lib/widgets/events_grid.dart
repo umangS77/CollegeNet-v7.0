@@ -10,7 +10,7 @@ class EventsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final eventsData = Provider.of<Events>(context);
     final events = showg ? eventsData.goingones : eventsData.items;
-    return GridView.builder(
+    return ListView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: events.length,
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
@@ -20,12 +20,6 @@ class EventsGrid extends StatelessWidget {
             // events[i].title,
             // events[i].imageURL,
             ),
-      ),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 3 / 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
       ),
     );
   }

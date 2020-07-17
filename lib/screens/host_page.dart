@@ -34,21 +34,19 @@ class _NewEventState extends State<NewEvent> {
   final _imageURLController = TextEditingController();
   final _sd1 = TextEditingController();
   final _st1 = TextEditingController();
-  final _ed1 = TextEditingController();
-  final _et1 = TextEditingController();
   final _imageURLFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
   var _editedEvent = Event2(
     id: null,
+    imageId: null,
     title: '',
     description: '',
     imageURL: '',
     noOfPraticipants: 0,
-    fee: 0,
+    fee: '',
     startDate: DateTime.now().toString(),
-    endDate: DateTime.now().toString(),
     startTime: DateTime.now().toString(),
-    endTime: DateTime.now().toString(),
+    count: 0,
   );
   var _isInit = true;
   var _isLoading = false;
@@ -79,15 +77,15 @@ class _NewEventState extends State<NewEvent> {
         _initValue = {
           'title': _editedEvent.title,
           'description': _editedEvent.description,
-          'fee': _editedEvent.fee.toString(),
+          'fee': _editedEvent.fee,
           'noOfParticipants': _editedEvent.noOfPraticipants.toString(),
           'imageURL': '',
+          'imageId': _editedEvent.imageId,
+          'count': _editedEvent.count.toString(),
         };
         _imageURLController.text = _editedEvent.imageURL;
         _sd1.text = _editedEvent.startDate;
         _st1.text = _editedEvent.startTime;
-        _ed1.text = _editedEvent.endDate;
-        _et1.text = _editedEvent.endTime;
       }
     }
     _isInit = false;
@@ -230,11 +228,11 @@ class _NewEventState extends State<NewEvent> {
         title: _editedEvent.title,
         description: _editedEvent.description,
         imageURL: imageURL,
+        imageId: _editedEvent.imageId,
         noOfPraticipants: _editedEvent.noOfPraticipants,
         startDate: _editedEvent.startDate,
-        endDate: _editedEvent.endDate,
+        count: _editedEvent.count,
         startTime: _editedEvent.startTime,
-        endTime: _editedEvent.endTime,
         fee: _editedEvent.fee,
         id: _editedEvent.id,
         isGoing: _editedEvent.isGoing,
@@ -296,11 +294,11 @@ class _NewEventState extends State<NewEvent> {
                               imageURL: _editedEvent.imageURL,
                               noOfPraticipants: _editedEvent.noOfPraticipants,
                               startDate: _editedEvent.startDate,
-                              endDate: _editedEvent.endDate,
+                              count: _editedEvent.count,
                               startTime: _editedEvent.startTime,
-                              endTime: _editedEvent.endTime,
                               fee: _editedEvent.fee,
                               id: _editedEvent.id,
+                              imageId: eventimageid,
                               isGoing: _editedEvent.isGoing,
                             );
                           },
@@ -331,11 +329,11 @@ class _NewEventState extends State<NewEvent> {
                               imageURL: _editedEvent.imageURL,
                               noOfPraticipants: int.parse(value),
                               startDate: _editedEvent.startDate,
-                              endDate: _editedEvent.endDate,
+                              count: _editedEvent.count,
                               startTime: _editedEvent.startTime,
-                              endTime: _editedEvent.endTime,
                               fee: _editedEvent.fee,
                               id: _editedEvent.id,
+                              imageId: eventimageid,
                               isGoing: _editedEvent.isGoing,
                             );
                           },
@@ -359,20 +357,21 @@ class _NewEventState extends State<NewEvent> {
                               imageURL: _editedEvent.imageURL,
                               noOfPraticipants: _editedEvent.noOfPraticipants,
                               startDate: _editedEvent.startDate,
-                              endDate: _editedEvent.endDate,
                               startTime: _editedEvent.startTime,
-                              endTime: _editedEvent.endTime,
+                              count: _editedEvent.count,
                               fee: _editedEvent.fee,
                               id: _editedEvent.id,
+                              imageId: eventimageid,
                               isGoing: _editedEvent.isGoing,
                             );
                           },
                         ),
                         TextFormField(
                           initialValue: _initValue['fee'],
-                          decoration: InputDecoration(labelText: 'Fee'),
+                          decoration:
+                              InputDecoration(labelText: 'Registration Link'),
                           textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.url,
                           onSaved: (value) {
                             _editedEvent = Event2(
                               title: _editedEvent.title,
@@ -380,11 +379,11 @@ class _NewEventState extends State<NewEvent> {
                               imageURL: _editedEvent.imageURL,
                               noOfPraticipants: _editedEvent.noOfPraticipants,
                               startDate: _editedEvent.startDate,
-                              endDate: _editedEvent.endDate,
+                              count: _editedEvent.count,
                               startTime: _editedEvent.startTime,
-                              endTime: _editedEvent.endTime,
-                              fee: double.parse(value),
+                              fee: value,
                               id: _editedEvent.id,
+                              imageId: eventimageid,
                               isGoing: _editedEvent.isGoing,
                             );
                           },
@@ -460,12 +459,12 @@ class _NewEventState extends State<NewEvent> {
                                   noOfPraticipants:
                                       _editedEvent.noOfPraticipants,
                                   startDate: value,
-                                  endDate: _editedEvent.endDate,
                                   startTime: _editedEvent.startTime,
-                                  endTime: _editedEvent.endTime,
                                   fee: _editedEvent.fee,
                                   id: _editedEvent.id,
+                                  imageId: eventimageid,
                                   isGoing: _editedEvent.isGoing,
+                                  count: _editedEvent.count,
                                 );
                               },
                             ),
@@ -491,74 +490,12 @@ class _NewEventState extends State<NewEvent> {
                                   noOfPraticipants:
                                       _editedEvent.noOfPraticipants,
                                   startDate: _editedEvent.startDate,
-                                  endDate: _editedEvent.endDate,
                                   startTime: value,
-                                  endTime: _editedEvent.endTime,
                                   fee: _editedEvent.fee,
                                   id: _editedEvent.id,
+                                  imageId: eventimageid,
                                   isGoing: _editedEvent.isGoing,
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        Text('Ends on:'),
-                        InkWell(
-                          onTap: () {
-                            _selectDate(
-                                _ed1); // Call Function that has showDatePicker()
-                          },
-                          child: IgnorePointer(
-                            child: new TextFormField(
-                              decoration:
-                                  new InputDecoration(hintText: 'End Date'),
-                              maxLength: 30,
-                              controller: _ed1,
-                              onSaved: (value) {
-                                _editedEvent = Event2(
-                                  title: _editedEvent.title,
-                                  description: _editedEvent.description,
-                                  imageURL: _editedEvent.imageURL,
-                                  noOfPraticipants:
-                                      _editedEvent.noOfPraticipants,
-                                  startDate: _editedEvent.startDate,
-                                  endDate: value,
-                                  startTime: _editedEvent.startTime,
-                                  endTime: _editedEvent.endTime,
-                                  fee: _editedEvent.fee,
-                                  id: _editedEvent.id,
-                                  isGoing: _editedEvent.isGoing,
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        Text('At:'),
-                        InkWell(
-                          onTap: () {
-                            _selectTime(
-                                _et1); // Call Function that has showDatePicker()
-                          },
-                          child: IgnorePointer(
-                            child: new TextFormField(
-                              decoration:
-                                  new InputDecoration(hintText: 'End Time'),
-                              maxLength: 30,
-                              controller: _et1,
-                              onSaved: (value) {
-                                _editedEvent = Event2(
-                                  title: _editedEvent.title,
-                                  description: _editedEvent.description,
-                                  imageURL: _editedEvent.imageURL,
-                                  noOfPraticipants:
-                                      _editedEvent.noOfPraticipants,
-                                  startDate: _editedEvent.startDate,
-                                  endDate: _editedEvent.endDate,
-                                  startTime: _editedEvent.startTime,
-                                  endTime: value,
-                                  fee: _editedEvent.fee,
-                                  id: _editedEvent.id,
-                                  isGoing: _editedEvent.isGoing,
+                                  count: _editedEvent.count,
                                 );
                               },
                             ),

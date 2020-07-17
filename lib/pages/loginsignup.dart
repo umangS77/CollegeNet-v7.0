@@ -1,7 +1,9 @@
 import 'package:collegenet/models/users.dart';
+import 'package:collegenet/pages/forgotpass.dart';
 import 'package:collegenet/services/auth.dart';
 import 'package:collegenet/services/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class LoginSignupPage extends StatefulWidget {
   LoginSignupPage({
@@ -25,9 +27,16 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   FormType _formType = FormType.login;
   String _email = "", _password = "";
   bool load = false;
-  String text1 = "Login", text2 = "Welcome Back";
+  String text1 = "Sign In", text2 = "Welcome Back";
   String errMsg = "";
-
+  List<Color> loginColor = [
+    Colors.orange[900],
+    Colors.orange[600],
+    Colors.orange[300],
+  ],
+      registerColor = [Colors.blueGrey, Colors.lightBlueAccent],
+      color;
+  bool visibleMessage = false;
   //Methods
   bool validateAndSave() {
     final form = formKey.currentState;
@@ -74,8 +83,9 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     passCont.clear();
     setState(() {
       _formType = FormType.register;
-      text1 = "Register";
+      text1 = "Sign Up";
       text2 = "Welcome Onboard";
+      color = registerColor;
     });
   }
 
@@ -84,9 +94,16 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     passCont.clear();
     setState(() {
       _formType = FormType.login;
-      text1 = "Login";
+      text1 = "Sign In";
       text2 = "Welcome Back";
+      color = loginColor;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    color = loginColor;
   }
 
   //Design
@@ -100,51 +117,78 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
-                  colors: [
-                    Colors.orange[900],
-                    Colors.orange[600],
-                    Colors.orange[300]
-                  ],
+                  colors: color,
                 ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: 80),
+                  // visibleMessage ? SizedBox(height: 40) : Container(),
+                  visibleMessage
+                      ? Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[50],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                    child: Text(
+                                  errMsg,
+                                  style: TextStyle(fontSize: 14),
+                                )),
+                                IconButton(
+                                    icon: Icon(Entypo.squared_cross),
+                                    onPressed: () {
+                                      setState(() {
+                                        visibleMessage = false;
+                                      });
+                                    })
+                              ],
+                            ),
+                          ),
+                        )
+                      : Text(''),
+                  visibleMessage
+                      ? SizedBox(height: 20)
+                      : SizedBox(
+                          height: 70,
+                        ),
                   // logo(),
                   Padding(
                     padding: EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              text1,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 40,
-                                  fontFamily: 'PermanentMarker'),
-                            ),
-                            // SizedBox(width:50.0),
-                            logo(),
-                          ],
+                        Center(
+                          child: Text(
+                            text2,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 40,
+                                fontFamily: 'Fenix'),
+                          ),
                         ),
+                        // SizedBox(width:50.0),
+                        // logo(),
                         SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          text2,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontFamily: 'Lato'),
+                        Center(
+                          child: Text(
+                            text1,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontFamily: 'Lato'),
+                          ),
                         ),
+                        logo(),
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  // SizedBox(height: 20),
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
@@ -259,14 +303,6 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
           ],
         ),
       );
-      // return Container(margin: EdgeInsets.symmetric(horizontal: 30.0),child:Text(
-      //   errMsg,
-      //   style: TextStyle(
-      //       fontSize: 13.0,
-      //       color: Colors.red,
-      //       height: 1.0,
-      //       fontWeight: FontWeight.w300),textAlign: TextAlign.center,
-      // ));
     } else {
       return new Container(
         height: 0.0,
@@ -277,57 +313,113 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   List<Widget> createButtons() {
     if (_formType == FormType.login) {
       return [
-        RaisedButton(
-          child: Text('Login',
-              style: TextStyle(
-                fontSize: 20.0,
-              )),
-          color: Colors.orange[800],
-          textColor: Colors.white,
-          onPressed: validateAndSubmit,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50.0),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          child: RaisedButton(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              child: Text('Sign In',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  )),
+            ),
+            color: Colors.orange[800],
+            textColor: Colors.white,
+            onPressed: validateAndSubmit,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  print("forgot");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ForgotPass(
+                        auth: widget.auth,
+                        forgotmessage: (e) {
+                          setState(() {
+                            visibleMessage = true;
+                            errMsg = e;
+                          });
+                        },
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  "Forgot Your Password?",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Lato',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(height: 15.0),
         RaisedButton(
-          child: Text('Don\'t have an account? Register',
-              style: TextStyle(
-                fontSize: 15.0,
-              )),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+            child: Text('Don\'t have an account? Sign Up',
+                style: TextStyle(
+                  fontSize: 17.0,
+                )),
+          ),
           color: Colors.orange[600],
           textColor: Colors.white,
           onPressed: moveToRegister,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50.0),
+            borderRadius: BorderRadius.circular(5.0),
           ),
         )
       ];
     } else {
       return [
-        RaisedButton(
-          child: Text('Register',
-              style: TextStyle(
-                fontSize: 20.0,
-              )),
-          color: Colors.orange[800],
-          textColor: Colors.white,
-          onPressed: validateAndSubmit,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50.0),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          child: RaisedButton(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              child: Text('Sign Up',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  )),
+            ),
+            color: Color(0xff48b6d1),
+            textColor: Colors.white,
+            onPressed: validateAndSubmit,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
           ),
         ),
-        SizedBox(height: 15.0),
-        RaisedButton(
-          onPressed: moveToLogin,
-          child: Text('Already have an account? Login',
-              style: TextStyle(
-                fontSize: 15.0,
-              )),
-          color: Colors.orange[600],
-          textColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50.0),
+        SizedBox(height: 25.0),
+        Container(
+          // width: MediaQuery.of(context).size.width,
+          child: RaisedButton(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              child: Text('Already Have an account, Sign In',
+                  style: TextStyle(
+                    fontSize: 17.0,
+                  )),
+            ),
+            color: Color(0xff0096d1),
+            textColor: Colors.white,
+            onPressed: moveToLogin,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
           ),
         )
       ];
@@ -340,7 +432,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
           tag: Text('icon'),
           child: CircleAvatar(
             backgroundColor: Colors.transparent,
-            radius: 60.0,
+            radius: 70.0,
             child: Image.asset('assets/images/logo1.jpg'),
           )),
     );

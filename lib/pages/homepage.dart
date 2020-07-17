@@ -10,7 +10,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:collegenet/pages/setupusername.dart';
-
 import '../services/loading.dart';
 import 'announcements.dart';
 
@@ -23,10 +22,10 @@ User currentUser;
 String userId;
 
 class HomePage extends StatefulWidget {
-  HomePage({this.auth, this.onSignedOut});
+  HomePage({this.auth, this.onSignedOut, this.pageIndex});
   final AuthImplementation auth;
   final VoidCallback onSignedOut;
-
+  final int pageIndex;
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -40,9 +39,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // print("1time");
+    pageIndex = widget.pageIndex;
+    print(pageIndex);
     createUserInFirestore();
-    pageController = PageController();
+    pageController = PageController(initialPage: pageIndex);
   }
 
   @override

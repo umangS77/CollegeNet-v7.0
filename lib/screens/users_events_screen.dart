@@ -3,11 +3,12 @@ import 'package:provider/provider.dart';
 import '../providers/events.dart';
 import '../widgets/user_event_item.dart';
 import '../widgets/app_drawer.dart';
+import 'host_page.dart';
 
 class UserEventsScreen extends StatelessWidget {
   static const routeName = '/user-products';
   Future<void> _refreshEvents(BuildContext context) async {
-    await Provider.of<Events>(context).fetchAndSetEvents();
+    await Provider.of<Events>(context).fetchAndSetOwnersEvents();
   }
 
   @override
@@ -19,7 +20,9 @@ class UserEventsScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed(NewEvent.routeName);
+            },
           ),
         ],
       ),

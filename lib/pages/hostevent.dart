@@ -50,10 +50,10 @@ class _HostEventState extends State<HostEvent> {
         ),
         home: EventOverview(),
         routes: {
+          EventOverview.routeName: (ctx) => EventOverview(),
           EventDetailScreen.routeName: (ctx) => EventDetailScreen(),
           NewEvent.routeName: (ctx) => NewEvent(),
           UserEventsScreen.routeName: (ctx) => UserEventsScreen(),
-          ChatScreen.routeName: (ctx) => ChatScreen(),
         },
       ),
     );

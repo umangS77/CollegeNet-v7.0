@@ -45,7 +45,7 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
   double randnum = 1;
 
   buildAnnouncementTile() {
-    isAnnouncementPostOwner = (userId == currentUser.id);
+    isAnnouncementPostOwner = (widget.userId == currentUser.id);
     details = widget.content;
     return Container(
       width: MediaQuery.of(context).size.width,

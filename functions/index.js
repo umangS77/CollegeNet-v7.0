@@ -4,12 +4,15 @@ admin.initializeApp(functions.config().firebase);
 exports.NewEvent = functions.database.ref('events/{id}')
 .onCreate((snap,evt) => {
     const payload = {
-        notification:{
-            title : "New Event Added - " + snap.val().title,
-            body : "Checkout the New Event Added",
-            badge : "1",
-            sound : "default",
-            image : snap.val().imageURL,
+        "notification":{
+            "title" : "New Event Added - " + snap.val().title,
+            "body" : "Checkout the New Event Added",
+            "image" : snap.val().imageURL, 
+        },
+        "data":{
+            "click_action" : "FLUTTER_NOTIFICATION_CLICK",
+            "sound" : "default",
+            "screen" : "1",
         }
     };
     
@@ -29,12 +32,14 @@ exports.NewEvent = functions.database.ref('events/{id}')
 exports.NewAnnouncement = functions.firestore.document('announcements/{id}')
 .onCreate((snapshot,context) => {
     const payload2 = {
-        notification:{
-            title : "Announcement Alert - " + snapshot.data().caption,
-            body : snapshot.data().content,
-            clickAction : 'FLUTTER_NOTIFICATION_CLICK',
-            badge : "1",
-            sound : "default"
+        "notification":{
+            "title" : "Announcement Alert - " + snapshot.data().caption,
+            "body" : snapshot.data().content, 
+        },
+        "data": {
+            "click_action" : "FLUTTER_NOTIFICATION_CLICK",
+            "sound":"default",
+            "screen":"3",
         }
     };
     return admin.database().ref('fcm-token').once('value').then(allToken=> {
