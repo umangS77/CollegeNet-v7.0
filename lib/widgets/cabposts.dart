@@ -313,15 +313,15 @@ class _CabPostsState extends State<CabPosts> {
                             )
                           : Container(),
                       RaisedButton.icon(
-                        color: Colors.black,
+                        color: Colors.black87,
                         icon: Icon(
                           Icons.add_box,
-                          color: Colors.black87,
+                          color: Colors.amberAccent[200],
                         ),
                         label: Text(
                           "Join Group",
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.amberAccent[200],
                           ),
                         ),
                         onPressed: () {
