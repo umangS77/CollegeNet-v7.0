@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collegenet/pages/cabsharing.dart';
 import 'package:collegenet/pages/homepage.dart';
+import 'package:collegenet/providers/allgrps.dart';
+import 'package:collegenet/providers/cabgrp.dart';
 import 'package:flutter/material.dart';
+import '../screens/chat_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:intl/intl.dart';
 
 class CabPosts extends StatefulWidget {
+  static const routeName = '/cabpost';
   CabPosts({
     this.postId,
     this.username,
@@ -18,6 +23,7 @@ class CabPosts extends StatefulWidget {
     this.facebook,
     this.contact,
     this.users,
+    this.chatRoomId,
     this.rebuild,
   });
   final Timestamp leavetime;
@@ -31,8 +37,9 @@ class CabPosts extends StatefulWidget {
   final String userId;
   final int count;
   final String users;
-  final VoidCallback rebuild;
 
+  final String chatRoomId;
+  final VoidCallback rebuild;
   factory CabPosts.fromDocument(DocumentSnapshot doc) {
     return new CabPosts(
       postId: doc['postId'],
@@ -46,6 +53,7 @@ class CabPosts extends StatefulWidget {
       leavetime: doc['leavetime'],
       contact: doc['contact'],
       users: doc['users'],
+      chatRoomId: doc['chatRoomId'],
     );
   }
   @override
@@ -306,7 +314,6 @@ class _CabPostsState extends State<CabPosts> {
                           : Container(),
                       RaisedButton.icon(
                         color: Colors.black,
-                        onPressed: null,
                         icon: Icon(
                           Icons.add_box,
                           color: Colors.black87,
@@ -317,6 +324,25 @@ class _CabPostsState extends State<CabPosts> {
                             color: Colors.black,
                           ),
                         ),
+                        onPressed: () {
+                          Provider.of<AllCabs>(context).addEvent(CabGroup(
+                            chatRoomId: widget.chatRoomId,
+                            source: widget.source,
+                            destination: widget.destination,
+                            leavetime: date + " " + time,
+                          ));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatScreen(
+                                chatRoomId: widget.chatRoomId,
+                                source: widget.source,
+                                destination: widget.destination,
+                                leavetime: date + " " + time,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

@@ -3,15 +3,15 @@ import 'package:collegenet/models/users.dart';
 import 'package:collegenet/pages/add_cabsharing.dart';
 import 'package:collegenet/pages/homepage.dart';
 import 'package:collegenet/services/auth.dart';
+import 'package:collegenet/widgets/appdrawer_cab.dart';
 import 'package:collegenet/widgets/cabposts.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../services/loading.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 final cabPostsRef = Firestore.instance.collection("CabPosts");
 final places = [];
-
 enum PageType {
   allPosts,
   myPosts,
@@ -23,6 +23,7 @@ String init = "";
 List<Widget> cabposts = [];
 
 class CabSharing extends StatefulWidget {
+  static const routeName = '/cabshare';
   CabSharing({
     this.auth,
     this.onSignedOut,
@@ -59,9 +60,7 @@ class _CabSharingState extends State<CabSharing> {
         rebuild: getCabposts,
       ));
     }
-    // posts =
-    // snapshot.documents.map((doc) => CabPosts.fromDocument(doc)).toList();
-
+    // List<DocumentSnapshot> l = snapshot.documents;
     for (var i = 0; i < posts.length; i++) {
       if (posts[i] != null) {
         cabposts.add(posts[i]);
@@ -74,7 +73,6 @@ class _CabSharingState extends State<CabSharing> {
     setState(() {
       init = '';
     });
-
     // print(posts[0].whatsapp);
   }
 
@@ -85,10 +83,10 @@ class _CabSharingState extends State<CabSharing> {
     snapshot = await cabPostsRef
         .where("college", isEqualTo: currentUser.college)
         .getDocuments();
+
     setState(() {
       isLoading = false;
     });
-
     List<DocumentSnapshot> l = snapshot.documents;
     places.clear();
     String cap, cap1;
@@ -118,7 +116,6 @@ class _CabSharingState extends State<CabSharing> {
     ),
   );
   Widget filter = Text("");
-
   search() async {
     cabposts.clear();
     final pl = await Navigator.push(
@@ -191,7 +188,6 @@ class _CabSharingState extends State<CabSharing> {
         ));
       }
       print(posts.length);
-
       if (posts.length == 1) cabposts.add(Text("No Result Found"));
     }
     setState(() {
@@ -202,7 +198,9 @@ class _CabSharingState extends State<CabSharing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       backgroundColor: Color(0xffe2ded3),
+      drawer: CabAppDrawer(),
       appBar: AppBar(
         backgroundColor: Color(0xff1a2639),
         title: Center(child: Text("Cabs")),
@@ -221,11 +219,10 @@ class _CabSharingState extends State<CabSharing> {
           ? circularProgress()
           : Container(
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: cabposts,
-                ),
-              ),
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: cabposts,
+                  )),
             ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -248,7 +245,6 @@ class _CabSharingState extends State<CabSharing> {
 
 class CitiesService {
   static List<String> cities = [];
-
   static List<String> getSuggestions(String query) {
     cities.clear();
     for (var i = 0; i < places.length; i++) {
@@ -275,7 +271,6 @@ class _FirstRouteState extends State<FirstRoute> {
   String _selectedCity1;
   String date = "All Dates", time = "All Dates";
   DateTime lDate, finaldate;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

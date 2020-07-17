@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Messages extends StatelessWidget {
+  Messages({
+    this.chatRoomId,
+  });
+  final String chatRoomId;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -16,7 +20,7 @@ class Messages extends StatelessWidget {
         }
         return StreamBuilder(
           stream: Firestore.instance
-              .collection('chat')
+              .collection('Chat Rooms/$chatRoomId/messages')
               .orderBy('createdAt', descending: true)
               .snapshots(),
           builder: (ctx, chatSnapshot) {
@@ -27,6 +31,7 @@ class Messages extends StatelessWidget {
             }
             final chatDocs = chatSnapshot.data.documents;
             print(chatDocs.length);
+            print(chatRoomId);
             return ListView.builder(
               reverse: true,
               itemCount: chatSnapshot.data.documents.length,

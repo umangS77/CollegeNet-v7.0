@@ -1,9 +1,18 @@
 import '../chat/new_message.dart';
 import 'package:flutter/material.dart';
 import '../chat/messages.dart';
-import '../widgets/app_drawer.dart';
 
 class ChatScreen extends StatelessWidget {
+  ChatScreen({
+    this.chatRoomId,
+    this.destination,
+    this.source,
+    this.leavetime,
+  });
+  final String chatRoomId;
+  final String source;
+  final String destination;
+  final String leavetime;
   static const routeName = '/chat-screen';
   @override
   Widget build(BuildContext context) {
@@ -11,15 +20,18 @@ class ChatScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Chat Screen'),
       ),
-      drawer: AppDrawer(),
       resizeToAvoidBottomPadding: false,
       body: Container(
         child: Column(
           children: <Widget>[
             Expanded(
-              child: Messages(),
+              child: Messages(
+                chatRoomId: chatRoomId,
+              ),
             ),
-            NewMessage(),
+            NewMessage(
+              chatRoomId: chatRoomId,
+            ),
           ],
         ),
       ),
