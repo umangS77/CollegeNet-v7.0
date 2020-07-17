@@ -1,3 +1,5 @@
+import 'package:collegenet/pages/homepage.dart';
+import 'package:collegenet/screens/host_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -29,6 +31,37 @@ class Events with ChangeNotifier {
       extractedData.forEach((prodId, prodData) {
         loadedEvents.add(Event2(
           id: prodId,
+          imageId: prodData['imageId'],
+          title: prodData['title'],
+          noOfPraticipants: prodData['noOfPraticipants'],
+          fee: prodData['fee'],
+          startDate: prodData['startDate'],
+          endDate: prodData['endDate'],
+          startTime: prodData['startTime'],
+          endTime: prodData['endTime'],
+          isGoing: prodData['isGoing'],
+          description: prodData['description'],
+          imageURL: prodData['imageURL'],
+        ));
+      });
+      _items = loadedEvents;
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
+  }
+  
+  Future<void> fetchAndSetOwnersEvents() async {
+    const url = 'https://collegenet-69.firebaseio.com/events.json';
+    try {
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Event2> loadedEvents = [];
+      extractedData.forEach((prodId, prodData) {
+        if(prodId == currentUser.id)
+        loadedEvents.add(Event2(
+          id: prodId,
+          imageId: prodData['imageId'],
           title: prodData['title'],
           imageId: prodData['imageId'],
           noOfPraticipants: prodData['noOfPraticipants'],
@@ -84,6 +117,7 @@ class Events with ChangeNotifier {
         url,
         body: json.encode({
           'title': evnt.title,
+          'imageId': evnt.imageId,
           'description': evnt.description,
           'noOfPraticipants': evnt.noOfPraticipants,
           'imageURL': evnt.imageURL,
@@ -97,6 +131,7 @@ class Events with ChangeNotifier {
       );
       final newEvent = Event2(
         title: evnt.title,
+        imageId: evnt.imageId,
         description: evnt.description,
         fee: evnt.fee,
         id: json.decode(response.body)['name'],
@@ -123,6 +158,7 @@ class Events with ChangeNotifier {
       http.patch(url,
           body: json.encode({
             'title': newEvent.title,
+            'imageId': newEvent.imageId,
             'description': newEvent.description,
             'imageURL': newEvent.imageURL,
             'startDate': newEvent.startDate,

@@ -37,6 +37,7 @@ class CabPosts extends StatefulWidget {
   final String userId;
   final int count;
   final String users;
+
   final String chatRoomId;
   final VoidCallback rebuild;
   factory CabPosts.fromDocument(DocumentSnapshot doc) {
@@ -346,9 +347,9 @@ class _CabPostsState extends State<CabPosts> {
                     ],
                   ),
                 ),
-                Divider(
-                  color: Colors.black,
-                ),
+                // Divider(
+                //   color: Colors.black,
+                // ),
               ]),
         ),
       ),

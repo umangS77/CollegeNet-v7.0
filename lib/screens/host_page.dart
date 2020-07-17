@@ -77,7 +77,9 @@ class _NewEventState extends State<NewEvent> {
         _initValue = {
           'title': _editedEvent.title,
           'description': _editedEvent.description,
-          'fee': _editedEvent.fee,
+          'imageId': _editedEvent.imageId,
+          'fee': _editedEvent.fee.toString(),
+
           'noOfParticipants': _editedEvent.noOfPraticipants.toString(),
           'imageURL': '',
           'imageId': _editedEvent.imageId,
@@ -226,6 +228,7 @@ class _NewEventState extends State<NewEvent> {
       createEventinFirestore(imageURL, _initValue['title'], eventimageid);
       _editedEvent = Event2(
         title: _editedEvent.title,
+        imageId: _editedEvent.imageId,
         description: _editedEvent.description,
         imageURL: imageURL,
         imageId: _editedEvent.imageId,
@@ -291,6 +294,7 @@ class _NewEventState extends State<NewEvent> {
                             _editedEvent = Event2(
                               title: value,
                               description: _editedEvent.description,
+                              imageId: eventimageid,
                               imageURL: _editedEvent.imageURL,
                               noOfPraticipants: _editedEvent.noOfPraticipants,
                               startDate: _editedEvent.startDate,
@@ -325,6 +329,7 @@ class _NewEventState extends State<NewEvent> {
                           onSaved: (value) {
                             _editedEvent = Event2(
                               title: _editedEvent.title,
+                              imageId: eventimageid,
                               description: _editedEvent.description,
                               imageURL: _editedEvent.imageURL,
                               noOfPraticipants: int.parse(value),
@@ -354,6 +359,7 @@ class _NewEventState extends State<NewEvent> {
                             _editedEvent = Event2(
                               title: _editedEvent.title,
                               description: value,
+                              imageId: eventimageid,
                               imageURL: _editedEvent.imageURL,
                               noOfPraticipants: _editedEvent.noOfPraticipants,
                               startDate: _editedEvent.startDate,
@@ -377,6 +383,7 @@ class _NewEventState extends State<NewEvent> {
                               title: _editedEvent.title,
                               description: _editedEvent.description,
                               imageURL: _editedEvent.imageURL,
+                              imageId: eventimageid,
                               noOfPraticipants: _editedEvent.noOfPraticipants,
                               startDate: _editedEvent.startDate,
                               count: _editedEvent.count,
@@ -456,6 +463,7 @@ class _NewEventState extends State<NewEvent> {
                                   title: _editedEvent.title,
                                   description: _editedEvent.description,
                                   imageURL: _editedEvent.imageURL,
+                                  imageId: eventimageid,
                                   noOfPraticipants:
                                       _editedEvent.noOfPraticipants,
                                   startDate: value,
@@ -487,6 +495,7 @@ class _NewEventState extends State<NewEvent> {
                                   title: _editedEvent.title,
                                   description: _editedEvent.description,
                                   imageURL: _editedEvent.imageURL,
+                                  imageId: eventimageid,
                                   noOfPraticipants:
                                       _editedEvent.noOfPraticipants,
                                   startDate: _editedEvent.startDate,
