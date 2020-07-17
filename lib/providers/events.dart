@@ -5,8 +5,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import './event1.dart';
 import '../models/http_exception.dart';
-import 'package:collegenet/pages/homepage.dart';
-import 'package:collegenet/screens/host_page.dart';
 
 class Events with ChangeNotifier {
   List<Event2> _items = [];
@@ -36,39 +34,10 @@ class Events with ChangeNotifier {
           noOfPraticipants: prodData['noOfPraticipants'],
           fee: prodData['fee'],
           startDate: prodData['startDate'],
-          endDate: prodData['endDate'],
+          // endDate: prodData['endDate'],
           startTime: prodData['startTime'],
-          endTime: prodData['endTime'],
+          // endTime: prodData['endTime'],
           isGoing: prodData['isGoing'],
-          description: prodData['description'],
-          imageURL: prodData['imageURL'],
-        ));
-      });
-      _items = loadedEvents;
-      notifyListeners();
-    } catch (error) {
-      throw error;
-    }
-  }
-  
-  Future<void> fetchAndSetOwnersEvents() async {
-    const url = 'https://collegenet-69.firebaseio.com/events.json';
-    try {
-      final response = await http.get(url);
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      final List<Event2> loadedEvents = [];
-      extractedData.forEach((prodId, prodData) {
-        if(prodId == currentUser.id)
-        loadedEvents.add(Event2(
-          id: prodId,
-          imageId: prodData['imageId'],
-          title: prodData['title'],
-          imageId: prodData['imageId'],
-          noOfPraticipants: prodData['noOfPraticipants'],
-          fee: prodData['fee'],
-          startDate: prodData['startDate'],
-          startTime: prodData['startTime'],
-          isGoing: false,
           description: prodData['description'],
           imageURL: prodData['imageURL'],
           count: prodData['count'],
@@ -93,11 +62,12 @@ class Events with ChangeNotifier {
             id: prodId,
             imageId: prodData['imageId'],
             title: prodData['title'],
+            // imageId: prodData['imageId'],
             noOfPraticipants: prodData['noOfPraticipants'],
             fee: prodData['fee'],
             startDate: prodData['startDate'],
             startTime: prodData['startTime'],
-            isGoing: prodData['isGoing'],
+            isGoing: false,
             description: prodData['description'],
             imageURL: prodData['imageURL'],
             count: prodData['count'],
@@ -109,6 +79,35 @@ class Events with ChangeNotifier {
       throw error;
     }
   }
+
+  // Future<void> fetchAndSetOwnersEvents() async {
+  //   const url = 'https://collegenet-69.firebaseio.com/events.json';
+  //   try {
+  //     final response = await http.get(url);
+  //     final extractedData = json.decode(response.body) as Map<String, dynamic>;
+  //     final List<Event2> loadedEvents = [];
+  //     extractedData.forEach((prodId, prodData) {
+  //       if (prodId == currentUser.id)
+  //         loadedEvents.add(Event2(
+  //           id: prodId,
+  //           imageId: prodData['imageId'],
+  //           title: prodData['title'],
+  //           noOfPraticipants: prodData['noOfPraticipants'],
+  //           fee: prodData['fee'],
+  //           startDate: prodData['startDate'],
+  //           startTime: prodData['startTime'],
+  //           isGoing: prodData['isGoing'],
+  //           description: prodData['description'],
+  //           imageURL: prodData['imageURL'],
+  //           count: prodData['count'],
+  //         ));
+  //     });
+  //     _items = loadedEvents;
+  //     notifyListeners();
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
   Future<void> addEvent(Event2 evnt) async {
     const url = 'https://collegenet-69.firebaseio.com/events.json';
@@ -126,7 +125,7 @@ class Events with ChangeNotifier {
           'count': evnt.count,
           'fee': evnt.fee,
           'isGoing': evnt.isGoing,
-          'imageId': evnt.imageId,
+          // 'imageId': evnt.imageId,
         }),
       );
       final newEvent = Event2(
@@ -140,7 +139,7 @@ class Events with ChangeNotifier {
         startDate: evnt.startDate,
         startTime: evnt.startTime,
         count: evnt.count,
-        imageId: evnt.imageId,
+        // imageId: evnt.imageId,
       );
       _items.add(newEvent);
       // _items.add(value);
@@ -165,7 +164,7 @@ class Events with ChangeNotifier {
             'startTime': newEvent.startTime,
             'fee': newEvent.fee,
             'count': newEvent.count,
-            'imageId': newEvent.imageId,
+            // 'imageId': newEvent.imageId,
             'noOfPraticipants': newEvent.noOfPraticipants,
           }));
       _items[evntIdx] = newEvent;

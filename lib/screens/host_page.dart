@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collegenet/services/loading.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class _NewEventState extends State<NewEvent> {
 
           'noOfParticipants': _editedEvent.noOfPraticipants.toString(),
           'imageURL': '',
-          'imageId': _editedEvent.imageId,
+          // 'imageId': _editedEvent.imageId,
           'count': _editedEvent.count.toString(),
         };
         _imageURLController.text = _editedEvent.imageURL;
@@ -214,6 +215,9 @@ class _NewEventState extends State<NewEvent> {
           .putFile(file);
       StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
       String downloadUrl = await storageSnap.ref.getDownloadURL();
+      setState(() {
+        isUploading = false;
+      });
       return downloadUrl;
     } else {
       print("we find file is null");
@@ -231,7 +235,7 @@ class _NewEventState extends State<NewEvent> {
         imageId: _editedEvent.imageId,
         description: _editedEvent.description,
         imageURL: imageURL,
-        imageId: _editedEvent.imageId,
+        // imageId: _editedEvent.imageId,
         noOfPraticipants: _editedEvent.noOfPraticipants,
         startDate: _editedEvent.startDate,
         count: _editedEvent.count,
@@ -263,7 +267,7 @@ class _NewEventState extends State<NewEvent> {
       drawer: AppDrawer(),
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: circularProgress(),
             )
           : Form(
               key: _form,
@@ -302,7 +306,7 @@ class _NewEventState extends State<NewEvent> {
                               startTime: _editedEvent.startTime,
                               fee: _editedEvent.fee,
                               id: _editedEvent.id,
-                              imageId: eventimageid,
+                              // imageId: eventimageid,
                               isGoing: _editedEvent.isGoing,
                             );
                           },
@@ -338,7 +342,7 @@ class _NewEventState extends State<NewEvent> {
                               startTime: _editedEvent.startTime,
                               fee: _editedEvent.fee,
                               id: _editedEvent.id,
-                              imageId: eventimageid,
+                              // imageId: eventimageid,
                               isGoing: _editedEvent.isGoing,
                             );
                           },
@@ -367,7 +371,7 @@ class _NewEventState extends State<NewEvent> {
                               count: _editedEvent.count,
                               fee: _editedEvent.fee,
                               id: _editedEvent.id,
-                              imageId: eventimageid,
+                              // imageId: eventimageid,
                               isGoing: _editedEvent.isGoing,
                             );
                           },
@@ -390,7 +394,7 @@ class _NewEventState extends State<NewEvent> {
                               startTime: _editedEvent.startTime,
                               fee: value,
                               id: _editedEvent.id,
-                              imageId: eventimageid,
+                              // imageId: eventimageid,
                               isGoing: _editedEvent.isGoing,
                             );
                           },
@@ -405,21 +409,23 @@ class _NewEventState extends State<NewEvent> {
                               child: RaisedButton(
                                 color: Colors.orange,
                                 child: Text('Upload Image'),
-                                onPressed: () async {
-                                  file = await FilePicker.getFile();
-                                  setState(() {
-                                    if (file == null) {
-                                      return "Please Upload an image";
-                                    } else {
-                                      String fileName =
-                                          file.path.split('/').last;
-                                      cnt = "$fileName";
-                                      print(file);
-                                      handleUpload();
-                                      return cnt;
-                                    }
-                                  });
-                                },
+                                onPressed: isUploading
+                                    ? null
+                                    : () async {
+                                        file = await FilePicker.getFile();
+                                        setState(() {
+                                          if (file == null) {
+                                            return "Please Upload an image";
+                                          } else {
+                                            String fileName =
+                                                file.path.split('/').last;
+                                            cnt = "$fileName";
+                                            print(file);
+                                            handleUpload();
+                                            return cnt;
+                                          }
+                                        });
+                                      },
                               ),
                             )
                           ],
@@ -427,22 +433,25 @@ class _NewEventState extends State<NewEvent> {
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          width: 100,
-                          height: 100,
-                          margin: EdgeInsets.only(
-                            top: 8,
-                            right: 10,
-                          ),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.grey,
+                        isUploading
+                            ? cubicalProgress()
+                            : Container(
+                                width: 100,
+                                height: 100,
+                                margin: EdgeInsets.only(
+                                  top: 8,
+                                  right: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                    image: DecorationImage(
+                                        image:
+                                            NetworkImage(_editedEvent.imageURL),
+                                        fit: BoxFit.cover)),
                               ),
-                              image: DecorationImage(
-                                  image: NetworkImage(_editedEvent.imageURL),
-                                  fit: BoxFit.cover)),
-                        ),
                         SizedBox(
                           height: 20,
                         ),
@@ -470,7 +479,7 @@ class _NewEventState extends State<NewEvent> {
                                   startTime: _editedEvent.startTime,
                                   fee: _editedEvent.fee,
                                   id: _editedEvent.id,
-                                  imageId: eventimageid,
+                                  // imageId: eventimageid,
                                   isGoing: _editedEvent.isGoing,
                                   count: _editedEvent.count,
                                 );
@@ -502,7 +511,7 @@ class _NewEventState extends State<NewEvent> {
                                   startTime: value,
                                   fee: _editedEvent.fee,
                                   id: _editedEvent.id,
-                                  imageId: eventimageid,
+                                  // imageId: eventimageid,
                                   isGoing: _editedEvent.isGoing,
                                   count: _editedEvent.count,
                                 );
