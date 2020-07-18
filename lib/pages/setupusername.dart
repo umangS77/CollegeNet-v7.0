@@ -30,6 +30,9 @@ class _CreateAccountState extends State<CreateAccount> {
     'UG2K18',
     'UG2K19',
     'UG2K20',
+    'PG2K18',
+    'PG2K19',
+    'PG2K20',
   ];
 
   submit() {

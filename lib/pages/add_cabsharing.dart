@@ -74,6 +74,7 @@ class _AddCabState extends State<AddCab> {
     return isUploading
         ? circularProgress()
         : Scaffold(
+            resizeToAvoidBottomPadding: false,
             appBar: AppBar(
               backgroundColor: Color(0xff1a2639),
               title: Text(
