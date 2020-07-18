@@ -10,6 +10,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:collegenet/pages/setupusername.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:line_awesome_icons/line_awesome_icons.dart';
 import '../services/loading.dart';
 import 'announcements.dart';
 
@@ -146,8 +148,9 @@ class _HomePageState extends State<HomePage> {
                   BottomNavigationBarItem(icon: Icon(Icons.chrome_reader_mode)),
                   BottomNavigationBarItem(icon: Icon(Icons.event_note)),
                   BottomNavigationBarItem(icon: Icon(Icons.directions_car)),
-                  BottomNavigationBarItem(icon: Icon(Icons.announcement)),
-                  BottomNavigationBarItem(icon: Icon(Icons.person)),
+                  BottomNavigationBarItem(
+                      icon: Icon(LineAwesomeIcons.bullhorn)),
+                  BottomNavigationBarItem(icon: Icon(MaterialIcons.person)),
                 ]));
   }
 }

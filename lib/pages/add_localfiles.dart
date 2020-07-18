@@ -33,10 +33,18 @@ class _AddLocalFileState extends State<AddLocalFile> {
   TextEditingController contentControl = TextEditingController();
   TextEditingController linkControl = TextEditingController();
   bool isEmptyTitle = false, isEmptyLink = false, isEmptyDes = false;
-
+  List<String> categoryList = [
+    'Notes',
+    'E-books',
+    'Resource Links',
+    'Repository',
+    'Mess Menu',
+    'Other'
+  ];
   String userId = currentUser.id,
       username = currentUser.username,
-      college = currentUser.college;
+      college = currentUser.college,
+      category = 'Other';
   String getExtension(File file) {
     int len = file.path.length;
     int idx = file.path.lastIndexOf('.');
@@ -72,6 +80,7 @@ class _AddLocalFileState extends State<AddLocalFile> {
     String content,
     String fileExtension,
     bool isFile,
+    String category,
   }) {
     localPostsRef.document(postId).setData({
       "postId": postId,
@@ -85,6 +94,7 @@ class _AddLocalFileState extends State<AddLocalFile> {
       "isFile": isFile,
       "fileExtension": fileExtension,
       "isApproved": false,
+      "category": category,
     });
     userWisePostsRef
         .document(userId)
@@ -102,6 +112,7 @@ class _AddLocalFileState extends State<AddLocalFile> {
       "isLocal": true,
       "fileExtension": fileExtension,
       "isApproved": false,
+      "category": category,
     });
     setState(() {
       file = null;
@@ -130,6 +141,7 @@ class _AddLocalFileState extends State<AddLocalFile> {
           content: contentControl.text,
           fileExtension: getExtension(file),
           isFile: toggleValue,
+          category: category,
         );
       } else {
         setState(() {
@@ -144,6 +156,7 @@ class _AddLocalFileState extends State<AddLocalFile> {
         content: contentControl.text,
         fileExtension: "",
         isFile: toggleValue,
+        category: category,
       );
     }
   }
@@ -284,7 +297,7 @@ class _AddLocalFileState extends State<AddLocalFile> {
                                 ),
                               ),
                             ),
-                      SizedBox(height: 20),
+                      // SizedBox(height: 20),
                       toggleValue
                           ? Center(
                               child: Container(
@@ -298,7 +311,7 @@ class _AddLocalFileState extends State<AddLocalFile> {
                               ),
                             )
                           : Container(),
-                      SizedBox(height: 20),
+                      toggleValue ? SizedBox(height: 20) : Text(''),
                       Container(
                         width: 350.0,
                         height: 100.0,
@@ -318,6 +331,39 @@ class _AddLocalFileState extends State<AddLocalFile> {
                             ),
                           ),
                         ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Choose Category: ',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          DropdownButton<String>(
+                            items: categoryList.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(
+                                  item,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String selectedOption) {
+                              setState(() {
+                                this.category = selectedOption;
+                              });
+                            },
+                            value: category,
+                          ),
+                        ],
                       ),
                       Center(
                         child: ButtonTheme(
