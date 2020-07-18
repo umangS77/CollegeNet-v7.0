@@ -522,16 +522,24 @@ class _FilePostState extends State<FilePost> {
         context: parentContext,
         builder: (context) {
           return SimpleDialog(
-            title: Text("Remove this post"),
+            contentPadding: EdgeInsets.all(15),
+            title: Center(
+              child: Text(
+                "Options",
+                style: TextStyle(fontSize: 24, fontFamily: 'Lora'),
+              ),
+            ),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.pop(context);
                   deleteFilePost();
                 },
-                child: Text(
-                  "Delete",
-                  style: TextStyle(color: Colors.red),
+                child: Center(
+                  child: Text(
+                    "Delete",
+                    style: TextStyle(fontSize: 16, fontFamily: 'Lora'),
+                  ),
                 ),
               ),
               SimpleDialogOption(
@@ -552,18 +560,22 @@ class _FilePostState extends State<FilePost> {
                             )),
                   );
                 },
-                child: Text(
-                  "Edit",
-                  style: TextStyle(color: Colors.red),
+                child: Center(
+                  child: Text(
+                    "Edit",
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text(
-                  "Cancel",
-                  style: TextStyle(color: Colors.black),
+                child: Center(
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.redAccent, fontSize: 16),
+                  ),
                 ),
               ),
             ],

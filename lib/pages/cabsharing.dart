@@ -43,7 +43,17 @@ class _CabSharingState extends State<CabSharing> {
   buildCabPosts() {
     cabposts.clear();
     posts.clear();
-    List<DocumentSnapshot> l = snapshot.documents;
+    List<DocumentSnapshot> l = snapshot.documents, revlist = [], userpost = [];
+    for (var i = l.length - 1; i >= 0; i--) {
+      if (l[i].data['userid'] == widget.user.id) {
+        print("1");
+        userpost.add(l[i]);
+      } else {
+        revlist.add(l[i]);
+        print("2");
+      }
+    }
+    l = revlist;
     for (var i = 0; i < l.length; i++) {
       posts.add(CabPosts(
         postId: l[i].data['postId'],
@@ -83,6 +93,7 @@ class _CabSharingState extends State<CabSharing> {
     });
     snapshot = await cabPostsRef
         .where("college", isEqualTo: currentUser.college)
+        .orderBy('leavetime')
         .getDocuments();
 
     setState(() {
@@ -198,6 +209,24 @@ class _CabSharingState extends State<CabSharing> {
     });
   }
 
+  Route _createRoute() {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => AddCab(
+              rebuild: getCabposts,
+            ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = Offset(0.0, 1.0);
+          var end = Offset.zero;
+          var curve = Curves.bounceInOut;
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -237,11 +266,7 @@ class _CabSharingState extends State<CabSharing> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => AddCab(
-                rebuild: getCabposts,
-              ),
-            ),
+            _createRoute(),
           );
         },
       ),
@@ -281,7 +306,8 @@ class _FirstRouteState extends State<FirstRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text("Search for cabs")),
+          title: Text("Search for cabs"),
+          centerTitle: true,
         ),
         body: Form(
           key: this._formKey,

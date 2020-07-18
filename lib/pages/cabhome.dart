@@ -46,7 +46,11 @@ class _HomeCabsState extends State<HomeCabs> {
           accentColor: Colors.orange,
           fontFamily: 'Chelsea',
         ),
-        home: CabSharing(),
+        home: CabSharing(
+          auth: widget.auth,
+          onSignedOut: widget.onSignedOut,
+          user: widget.user,
+        ),
         routes: {
           AllChats.routeName: (ctx) => AllChats(),
           CabPosts.routeName: (context) => CabPosts(),

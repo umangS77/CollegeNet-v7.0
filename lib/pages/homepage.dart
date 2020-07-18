@@ -96,7 +96,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   onTap(int pageIndex) {
-    pageController.jumpToPage(pageIndex);
+    pageController.animateToPage(pageIndex,
+        duration: Duration(seconds: 1), curve: Curves.fastLinearToSlowEaseIn);
     // pageController.animateToPage(pageIndex,
     // duration: Duration(milliseconds: 500),
     // curve: Curves.easeIn);

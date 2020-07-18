@@ -319,7 +319,7 @@ class _CabPostsState extends State<CabPosts> {
                           color: Colors.amberAccent[200],
                         ),
                         label: Text(
-                          "Join Group",
+                          "Enter Chat",
                           style: TextStyle(
                             color: Colors.amberAccent[200],
                           ),

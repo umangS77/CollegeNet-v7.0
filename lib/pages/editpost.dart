@@ -219,7 +219,7 @@ class _EditPostState extends State<EditPost> {
         ? circularProgress()
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.orange[800],
+              backgroundColor: Color(0xff1a2639),
               title: Text(
                 'Edit Post',
                 style: TextStyle(
@@ -232,12 +232,14 @@ class _EditPostState extends State<EditPost> {
             body: SingleChildScrollView(
               child: Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.91,
+                height: 900,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topCenter,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                     colors: [
                       Colors.cyan[100],
+                      Colors.blue[100],
                       Colors.orange[300],
                     ],
                   ),
