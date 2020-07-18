@@ -113,7 +113,7 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
                                 onPressed: () =>
                                     handleDeleteAnnouncement(context))
                             : IconButton(
-                            icon: Icon(Icons.keyboard_arrow_down),
+                            icon: Icon(Icons.report),
                             color: Colors.orange,
                             onPressed: () =>
                                 handleReportAnnouncement(context)),
