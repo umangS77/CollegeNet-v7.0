@@ -173,6 +173,72 @@ class _FilePostState extends State<FilePost> {
     }
   }
 
+  createPostInFirestore(
+      {String ownerId,
+        String postid}) async {
+    String reportid = "Posts--" + postid + "--" + currentUser.id;
+    await reportRef.document(reportid).setData({
+      "postid": postid,
+      "reportingUserId": currentUser.id,
+      "ContentOwnerId": userId,
+    });
+    setState(() {
+      reportid = "Announcements--" + postid + "--" + currentUser.id;
+    });
+    widget.rebuild();
+    Navigator.pop(context);
+  }
+
+  handleReport() async {
+    setState(() {
+    });
+    createPostInFirestore(
+      postid: widget.postId,
+      ownerId: widget.userId,
+    );
+  }
+
+  reportAnnouncementPost() async {
+    await localPostsRef.document(widget.postId).get().then((doc) {
+      if (doc.exists) {
+        handleReport();
+      }
+    });
+    widget.rebuild();
+  }
+
+  handleReportFilePost(BuildContext parentContext) {
+    return showDialog(
+        context: parentContext,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text("Report this File ?"),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context);
+                  reportAnnouncementPost();
+                },
+                child: Text(
+                  "Yes",
+                  style: TextStyle(color: Colors.red),
+                ),
+
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "No",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
   frontView() {
     // print('enter front view');
     return Material(
@@ -232,7 +298,9 @@ class _FilePostState extends State<FilePost> {
                     ? IconButton(
                         icon: Icon(Icons.more_vert),
                         onPressed: () => handleDeleteFilePost(context))
-                    : Text(''),
+                    : IconButton(
+                    icon: Icon(Icons.report),
+                    onPressed: () => handleReportFilePost(context)),
               ),
             ),
             SizedBox(
@@ -448,7 +516,7 @@ class _FilePostState extends State<FilePost> {
   buildPostHeader() {
     // print(content)
     // print(isFile);
-    isFilePostOwner = (userId == currentUser.id);
+    isFilePostOwner = (widget.userId == currentUser.id);
     details = widget.content;
     return Container(
       width: MediaQuery.of(context).size.width,
