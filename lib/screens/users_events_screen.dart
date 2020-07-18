@@ -4,13 +4,12 @@ import '../providers/events.dart';
 import '../widgets/user_event_item.dart';
 import '../widgets/app_drawer.dart';
 import 'host_page.dart';
-
-
 class UserEventsScreen extends StatelessWidget {
   static const routeName = '/user-products';
   Future<void> _refreshEvents(BuildContext context) async {
     await Provider.of<Events>(context).fetchAndSetOwnersEvents();
   }
+
   @override
   Widget build(BuildContext context) {
     final evntsData = Provider.of<Events>(context);

@@ -1,9 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collegenet/pages/cabsharing.dart';
 import 'package:collegenet/pages/homepage.dart';
+import 'package:collegenet/providers/allgrps.dart';
+import 'package:collegenet/providers/cabgrp.dart';
 import 'package:flutter/material.dart';
+import '../screens/chat_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:intl/intl.dart';
 
 class CabPosts extends StatefulWidget {
+  static const routeName = '/cabpost';
   CabPosts({
     this.postId,
     this.username,
@@ -16,6 +23,7 @@ class CabPosts extends StatefulWidget {
     this.facebook,
     this.contact,
     this.users,
+    this.chatRoomId,
     this.rebuild,
   });
   final Timestamp leavetime;
@@ -29,8 +37,9 @@ class CabPosts extends StatefulWidget {
   final String userId;
   final int count;
   final String users;
-  final VoidCallback rebuild;
 
+  final String chatRoomId;
+  final VoidCallback rebuild;
   factory CabPosts.fromDocument(DocumentSnapshot doc) {
     return new CabPosts(
       postId: doc['postId'],
@@ -44,6 +53,7 @@ class CabPosts extends StatefulWidget {
       leavetime: doc['leavetime'],
       contact: doc['contact'],
       users: doc['users'],
+      chatRoomId: doc['chatRoomId'],
     );
   }
   @override
@@ -53,27 +63,13 @@ class CabPosts extends StatefulWidget {
 class _CabPostsState extends State<CabPosts> {
   var temp;
   var randnum;
+  var count;
   String filepath;
   bool isOwner;
   String date;
   String time;
   String minu;
   String hou;
-  List<String> mon = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'June',
-    'July',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec'
-  ];
-
   deleteFilePost() async {
     await cabPostsRef.document(widget.postId).get().then((doc) {
       if (doc.exists) {
@@ -100,28 +96,6 @@ class _CabPostsState extends State<CabPosts> {
                   style: TextStyle(color: Colors.red),
                 ),
               ),
-              // SimpleDialogOption(
-              //   onPressed: () {
-              //     Navigator.pop(context);
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) => EditPost(
-              //                 postId: widget.postId,
-              //                 caption: widget.caption,
-              //                 content: widget.content,
-              //                 mediaUrl: widget.mediaUrl,
-              //                 isLocal: widget.isLocal,
-              //                 isFile: widget.isFile,
-              //                 fileExtension: widget.fileExtension,
-              //               )),
-              //     );
-              //   },
-              //   child: Text(
-              //     "Edit",
-              //     style: TextStyle(color: Colors.red),
-              //   ),
-              // ),
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.pop(context);
@@ -148,18 +122,16 @@ class _CabPostsState extends State<CabPosts> {
       hou = widget.leavetime.toDate().toLocal().hour.toString();
     }
     time = hou + " : " + minu;
-    date = widget.leavetime.toDate().toUtc().day.toString() +
-        "-" +
-        mon[widget.leavetime.toDate().toUtc().month] +
-        "-" +
-        widget.leavetime.toDate().toUtc().year.toString();
+    date = DateFormat.yMMMd().format(widget.leavetime.toDate());
     isOwner = (widget.userId == currentUser.id);
-    return Material(
-      color: Colors.white.withOpacity(0.65),
-      borderRadius: BorderRadius.circular(24),
-      shadowColor: Colors.amber.withOpacity(0.9),
-      child: Container(
-        decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(25, 10, 25, 15),
+      child: Material(
+        color: Colors.white.withOpacity(0.65),
+        borderRadius: BorderRadius.circular(0),
+        shadowColor: Colors.amber.withOpacity(0.9),
+        child: Container(
+          decoration: BoxDecoration(
             border: Border.all(),
             gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -171,164 +143,222 @@ class _CabPostsState extends State<CabPosts> {
                   Colors.amberAccent[200],
                   Colors.amberAccent[100],
                 ]),
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 15,
-                color: Colors.yellow,
-                spreadRadius: 1,
-                offset: Offset(9, 0),
-              ),
-              BoxShadow(
-                blurRadius: 15,
-                color: Colors.white,
-                spreadRadius: 1,
-                offset: Offset(-4, 0),
-              )
-            ]),
-        // padding: EdgeInsets.all(50),
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.black87,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(22)),
-                ),
-                height: 70.0,
-                width: MediaQuery.of(context).size.width,
-                child: ListTile(
-                  leading: Padding(
-                    padding: EdgeInsets.only(top: 0),
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage(filepath),
-                      radius: 25,
-                    ),
+            borderRadius: BorderRadius.circular(0),
+            // boxShadow: [
+            //   BoxShadow(
+            //     blurRadius: 15,
+            //     color: Colors.yellow,
+            //     spreadRadius: 1,
+            //     offset: Offset(9, 0),
+            //   ),
+            //   BoxShadow(
+            //     blurRadius: 15,
+            //     color: Colors.white,
+            //     spreadRadius: 1,
+            //     offset: Offset(-4, 0),
+            //   )
+            // ],
+          ),
+          // padding: EdgeInsets.all(50),
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.black87,
+                    // borderRadius: BorderRadius.only(
+                    //     topLeft: Radius.circular(24),
+                    //     topRight: Radius.circular(22)),
                   ),
-                  title: Text(
-                    widget.username.toUpperCase(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
+                  height: 70.0,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListTile(
+                    leading: Padding(
+                      padding: EdgeInsets.only(top: 0),
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage(filepath),
+                        radius: 25,
+                      ),
                     ),
+                    title: Text(
+                      widget.username.toUpperCase(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(5),
+                    dense: true,
+                    trailing: isOwner
+                        ? IconButton(
+                            color: Colors.amber,
+                            icon: Icon(Icons.more_vert),
+                            onPressed: () => handleDeleteFilePost(context))
+                        : Text(''),
                   ),
-                  contentPadding: EdgeInsets.all(5),
-                  dense: true,
-                  trailing: isOwner
-                      ? IconButton(
-                          color: Colors.amber,
-                          icon: Icon(Icons.more_vert),
-                          onPressed: () => handleDeleteFilePost(context))
-                      : Text(''),
                 ),
-              ),
-              Divider(color: Colors.black),
-              Material(
-                  color: Colors.white.withOpacity(0.45),
-                  borderRadius: BorderRadius.circular(24),
-                  child: Column(
-                    children: <Widget>[
+                // Divider(color: Colors.black),
+                Material(
+                    color: Colors.white.withOpacity(0.45),
+                    // borderRadius: BorderRadius.circular(24),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.all(20),
+                          alignment: Alignment.center,
+                          child: Text(
+                            date,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+                // Divider(
+                //   color: Colors.black,
+                // ),
+                Row(children: <Widget>[
+                  Container(
+                      padding: EdgeInsets.only(left: 30, right: 10),
+                      height: 120,
+                      alignment: Alignment(0, -0.45),
+                      child: CustomPaint(
+                        painter: LocPainter(),
+                      )),
+                  Container(
+                      padding: EdgeInsets.all(30),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(border: Border.all()),
+                              child: Text(widget.source)),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(border: Border.all()),
+                              child: Text(
+                                widget.destination,
+                              )),
+                        ],
+                      )),
+                ]),
+                Material(
+                    color: Colors.white.withOpacity(0.45),
+                    // borderRadius: BorderRadius.circular(24),
+                    child: Column(children: <Widget>[
                       Container(
                         padding: EdgeInsets.all(20),
                         alignment: Alignment.center,
                         child: Text(
-                          date,
+                          "Leaving Around  :-" + "  " + time,
                           style: TextStyle(
                             fontSize: 20,
                           ),
                         ),
                       ),
-                    ],
-                  )),
-              Divider(
-                color: Colors.black,
-              ),
-              Row(children: <Widget>[
+                    ])),
+                // Divider(
+                //   color: Colors.black,
+                // ),
                 Container(
-                    padding: EdgeInsets.only(left: 30, right: 10),
-                    height: 120,
-                    alignment: Alignment(0, -0.45),
-                    child: CustomPaint(
-                      painter: LocPainter(),
-                    )),
-                Container(
-                    padding: EdgeInsets.all(30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(border: Border.all()),
-                            child: Text(widget.source)),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(border: Border.all()),
-                            child: Text(
-                              widget.destination,
-                            )),
-                      ],
-                    )),
-              ]),
-              Material(
-                  color: Colors.white.withOpacity(0.45),
-                  borderRadius: BorderRadius.circular(24),
-                  child: Column(children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Leaving Around :-" + "   " + time,
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ])),
-              Divider(
-                color: Colors.black,
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Text("Already Going: " + "  " + widget.count.toString()),
-                    RaisedButton.icon(
-                      color: Colors.black,
-                      onPressed: null,
-                      icon: Icon(
-                        Icons.add_box,
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Text("Already Going: " + "  " + count.toString()),
+                      (currentUser.id == widget.userId)
+                          ? Column(
+                              children: <Widget>[
+                                IconButton(
+                                  icon: Icon(AntDesign.pluscircleo),
+                                  onPressed: () {
+                                    // print(count);
+                                    setState(() {
+                                      count = count + 1;
+                                    });
+                                    cabPostsRef
+                                        .document(widget.postId)
+                                        .updateData({
+                                      "count": count,
+                                    });
+                                    widget.rebuild();
+                                  },
+                                  iconSize: 20,
+                                ),
+                                IconButton(
+                                  icon: Icon(AntDesign.minuscircleo),
+                                  onPressed: () {
+                                    setState(() {
+                                      count = count - 1;
+                                    });
+                                    cabPostsRef
+                                        .document(widget.postId)
+                                        .updateData({
+                                      "count": count,
+                                    });
+                                    widget.rebuild();
+                                  },
+                                  iconSize: 20,
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      RaisedButton.icon(
                         color: Colors.black87,
-                      ),
-                      label: Text(
-                        "Join Group",
-                        style: TextStyle(
-                          color: Colors.black,
+                        icon: Icon(
+                          Icons.add_box,
+                          color: Colors.amberAccent[200],
                         ),
+                        label: Text(
+                          "Enter Chat",
+                          style: TextStyle(
+                            color: Colors.amberAccent[200],
+                          ),
+                        ),
+                        onPressed: () {
+                          Provider.of<AllCabs>(context).addEvent(CabGroup(
+                            chatRoomId: widget.chatRoomId,
+                            source: widget.source,
+                            destination: widget.destination,
+                            leavetime: date + " " + time,
+                          ));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatScreen(
+                                chatRoomId: widget.chatRoomId,
+                                source: widget.source,
+                                destination: widget.destination,
+                                leavetime: date + " " + time,
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Divider(
-                color: Colors.black,
-              ),
-            ]),
+                // Divider(
+                //   color: Colors.black,
+                // ),
+              ]),
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    count = widget.count;
     temp = widget.userId.codeUnitAt(0);
     randnum = 1 + (temp - 48);
     temp = randnum.ceil();

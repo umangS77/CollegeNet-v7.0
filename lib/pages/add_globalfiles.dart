@@ -34,8 +34,25 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
   TextEditingController linkControl = TextEditingController();
   String userId = currentUser.id,
       username = currentUser.username,
-      college = currentUser.college;
+      college = currentUser.college,
+      category = 'Other';
   bool isEmptyTitle = false, isEmptyLink = false, isEmptyDes = false;
+  List<String> categoryList = [
+    'Notes',
+    'E-books',
+    'Resource Links',
+    'Repository',
+    'Mess Menu',
+    'Other'
+  ];
+  bool ug2k19, ug2k20, ug2k18, ug2k17, ug2k16, pg2k18, pg2k19, pg2k20;
+
+  initialzeBatches() {
+    setState(() {
+      ug2k19 =
+          ug2k20 = ug2k18 = ug2k17 = ug2k16 = pg2k18 = pg2k19 = pg2k20 = false;
+    });
+  }
 
   String getExtension(File file) {
     int len = file.path.length;
@@ -52,6 +69,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
   void initState() {
     super.initState();
     cnt = "No file chosen";
+    initialzeBatches();
   }
 
   Future<String> uploadImage(File file) async {
@@ -71,7 +89,9 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
       String caption,
       String content,
       String fileExtension,
-      bool isFile}) {
+      bool isFile,
+      String category,
+      List<String> selectedbatch}) {
     localPostsRef.document(postId).setData({
       "postId": postId,
       "userId": userId,
@@ -84,6 +104,8 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
       "isFile": isFile,
       "fileExtension": fileExtension,
       "isApproved": false,
+      "category": category,
+      "selectedbatch": selectedbatch,
     });
     userWisePostsRef
         .document(userId)
@@ -101,6 +123,8 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
       "isLocal": false,
       "fileExtension": fileExtension,
       "isApproved": false,
+      "category": category,
+      "selectedbatch": selectedbatch,
     });
     setState(() {
       file = null;
@@ -118,6 +142,34 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
     setState(() {
       isUploading = true;
     });
+    List<bool> batchlist = [
+      ug2k19,
+      ug2k20,
+      ug2k18,
+      ug2k17,
+      ug2k16,
+      pg2k18,
+      pg2k19,
+      pg2k20
+    ];
+    List<String> batchliststr = [
+      'ug2k19',
+      'ug2k20',
+      'ug2k18',
+      'ug2k17',
+      'ug2k16',
+      'pg2k18',
+      'pg2k19',
+      'pg2k20'
+    ];
+    List<String> selectedbatch = [];
+    for (var i = 0; i < batchlist.length; i++) {
+      if (batchlist[i]) {
+        selectedbatch.add(batchliststr[i].toUpperCase());
+        // print(selectedbatch[0]);
+      }
+    }
+
     print(toggleValue.toString() + "check ");
     if (toggleValue) {
       String mediaURL = await uploadImage(file);
@@ -129,6 +181,8 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
           content: contentControl.text,
           fileExtension: getExtension(file),
           isFile: toggleValue,
+          category: category,
+          selectedbatch: selectedbatch,
         );
       } else {
         setState(() {
@@ -143,8 +197,123 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
         content: contentControl.text,
         fileExtension: "",
         isFile: toggleValue,
+        category: category,
+        selectedbatch: selectedbatch,
       );
     }
+  }
+
+  handleBatch(BuildContext parentContext) {
+    return showDialog(
+        context: parentContext,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return SimpleDialog(
+                contentPadding: EdgeInsets.all(15),
+                title: Center(
+                  child: Text(
+                    "Select Batches",
+                    style: TextStyle(fontSize: 22, fontFamily: 'Lora'),
+                  ),
+                ),
+                children: <Widget>[
+                  Center(
+                    child: CheckboxListTile(
+                      value: ug2k16,
+                      title: Text('UG2K16'),
+                      onChanged: (value) {
+                        setState(() {
+                          ug2k16 = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Center(
+                    child: CheckboxListTile(
+                      value: ug2k17,
+                      title: Text('UG2K17'),
+                      onChanged: (value) {
+                        setState(() {
+                          ug2k17 = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Center(
+                    child: CheckboxListTile(
+                      value: ug2k18,
+                      title: Text('UG2K18'),
+                      onChanged: (value) {
+                        setState(() {
+                          ug2k18 = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Center(
+                    child: CheckboxListTile(
+                      value: ug2k19,
+                      title: Text('UG2K19'),
+                      onChanged: (value) {
+                        setState(() {
+                          ug2k19 = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Center(
+                    child: CheckboxListTile(
+                      value: ug2k20,
+                      title: Text('UG2K20'),
+                      onChanged: (value) {
+                        setState(() {
+                          ug2k20 = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Center(
+                    child: CheckboxListTile(
+                      value: pg2k18,
+                      title: Text('PG2K18'),
+                      onChanged: (value) {
+                        setState(() {
+                          pg2k18 = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Center(
+                    child: CheckboxListTile(
+                      value: pg2k19,
+                      title: Text('PG2K19'),
+                      onChanged: (value) {
+                        setState(() {
+                          pg2k19 = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Center(
+                    child: CheckboxListTile(
+                      value: pg2k20,
+                      title: Text('PG2K20'),
+                      onChanged: (value) {
+                        setState(() {
+                          pg2k20 = value;
+                        });
+                      },
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Done'),
+                  )
+                ]);
+          });
+        });
   }
 
   @override
@@ -283,7 +452,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
                                 ),
                               ),
                             ),
-                      SizedBox(height: 20),
+                      // SizedBox(height: 20),
                       toggleValue
                           ? Center(
                               child: Container(
@@ -297,7 +466,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
                               ),
                             )
                           : Container(),
-                      SizedBox(height: 20),
+                      toggleValue ? SizedBox(height: 20) : Text(''),
                       Container(
                         width: 350.0,
                         height: 100.0,
@@ -317,6 +486,49 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
                             ),
                           ),
                         ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Category: ',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          DropdownButton<String>(
+                            items: categoryList.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(
+                                  item,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String selectedOption) {
+                              setState(() {
+                                this.category = selectedOption;
+                              });
+                            },
+                            value: category,
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: RaisedButton(
+                          onPressed: () => handleBatch(context),
+                          child: Text('Select Target Batches'),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                       Center(
                         child: ButtonTheme(
@@ -352,7 +564,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

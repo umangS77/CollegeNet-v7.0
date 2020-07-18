@@ -1,17 +1,15 @@
 import 'package:collegenet/models/users.dart';
+import 'package:collegenet/pages/cabsharing.dart';
+import 'package:collegenet/screens/allchats.dart';
 import 'package:collegenet/services/auth.dart';
+import 'package:collegenet/widgets/cabposts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../screens/event_overview.dart';
-import '../screens/event_detail.dart';
-import '../providers/events.dart';
-import '../screens/host_page.dart';
-import '../screens/users_events_screen.dart';
-import '../screens/chat_screen.dart';
+import '../providers/allgrps.dart';
 
-class HostEvent extends StatefulWidget {
-  static const routeName = '/evnthome';
-  HostEvent({
+class HomeCabs extends StatefulWidget {
+  static const routeName = '/cabhome';
+  HomeCabs({
     this.auth,
     this.onSignedOut,
     this.user,
@@ -20,10 +18,10 @@ class HostEvent extends StatefulWidget {
   final VoidCallback onSignedOut;
   final User user;
   @override
-  _HostEventState createState() => _HostEventState();
+  _HomeCabsState createState() => _HomeCabsState();
 }
 
-class _HostEventState extends State<HostEvent> {
+class _HomeCabsState extends State<HomeCabs> {
   //added because primary swatch does not accept colors, only materialcolor
   Map<int, Color> color = {
     50: Color.fromRGBO(136, 14, 79, .1),
@@ -40,20 +38,22 @@ class _HostEventState extends State<HostEvent> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (ctx) => Events(),
+      builder: (ctx) => AllCabs(),
       child: MaterialApp(
-        title: 'Event Host',
+        title: 'Cab',
         theme: ThemeData(
           primarySwatch: MaterialColor(0xff1a2639, color),
           accentColor: Colors.orange,
           fontFamily: 'Chelsea',
         ),
-        home: EventOverview(),
+        home: CabSharing(
+          auth: widget.auth,
+          onSignedOut: widget.onSignedOut,
+          user: widget.user,
+        ),
         routes: {
-          EventOverview.routeName: (ctx) => EventOverview(),
-          EventDetailScreen.routeName: (ctx) => EventDetailScreen(),
-          NewEvent.routeName: (ctx) => NewEvent(),
-          UserEventsScreen.routeName: (ctx) => UserEventsScreen(),
+          AllChats.routeName: (ctx) => AllChats(),
+          CabPosts.routeName: (context) => CabPosts(),
         },
       ),
     );

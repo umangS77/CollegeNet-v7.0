@@ -7,7 +7,7 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
-  String username, college = 'IIIT-H',batch='UG2k15';
+  String username, college = 'IIIT-H', batch = 'UG2k15';
   List<String> collegeList = [
     'IIIT-H',
     'IIT-B',
@@ -30,6 +30,9 @@ class _CreateAccountState extends State<CreateAccount> {
     'UG2K18',
     'UG2K19',
     'UG2K20',
+    'PG2K18',
+    'PG2K19',
+    'PG2K20',
   ];
 
   submit() {
@@ -41,7 +44,9 @@ class _CreateAccountState extends State<CreateAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffe2ded3),
       appBar: AppBar(
+        backgroundColor: Color(0xff1a2639),
         automaticallyImplyLeading: false,
         title: Text(
           'Set Up your Profile',
@@ -82,6 +87,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               labelStyle: TextStyle(fontSize: 15.0),
                               hintText: "Must be at least 3 characters",
                             ),
+                            maxLength: 14,
                           ),
                           SizedBox(
                             height: 12.0,

@@ -3,10 +3,11 @@
 import 'package:collegenet/mapping.dart';
 import 'package:flutter/material.dart';
 import 'package:collegenet/services/auth.dart';
-void main()
-{
+
+void main() {
   runApp(SummerApp());
 }
+
 class SummerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,9 @@ class SummerApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: MappingPage(auth: Auth(),),
+      home: MappingPage(
+        auth: Auth(),
+      ),
     );
   }
 }

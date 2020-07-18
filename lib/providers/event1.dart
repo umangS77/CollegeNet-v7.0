@@ -4,14 +4,14 @@ class Event2 with ChangeNotifier {
   final String id;
   final String imageId;
   final String title;
+  // final String imageId;
   final String description;
   final String imageURL;
   final int noOfPraticipants;
-  final double fee;
+  final String fee;
   String startDate;
-  String endDate;
   String startTime;
-  String endTime;
+  final int count;
   bool isGoing;
   Event2({
     @required this.id,
@@ -22,9 +22,9 @@ class Event2 with ChangeNotifier {
     @required this.noOfPraticipants,
     @required this.fee,
     @required this.startDate,
-    @required this.endDate,
     @required this.startTime,
-    @required this.endTime,
+    @required this.count,
+    // @required this.imageId,
     this.isGoing = false,
   });
   void toggleGoingStatus() async {

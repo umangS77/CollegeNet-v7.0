@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/host_page.dart';
 import '../screens/users_events_screen.dart';
-import '../screens/chat_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -36,14 +35,6 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(UserEventsScreen.routeName);
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Chat Screen'),
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed(ChatScreen.routeName);
             },
           ),
         ],

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 import 'package:collegenet/pages/homepage.dart';
@@ -32,7 +33,11 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
     cnt = "No notice";
   }
 
-  createPostInFirestore({String caption, String content, String target}) async {
+  createPostInFirestore(
+      {String caption,
+      String content,
+      String target,
+      Timestamp nowtime}) async {
     await announcementRef.document(postid).setData({
       "postid": postid,
       "userId": userId,
@@ -41,6 +46,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
       "content": content,
       "college": college,
       "target": target,
+      "nowtime": nowtime,
     });
     setState(() {
       postid = Uuid().v4();
@@ -57,10 +63,12 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
     setState(() {
       isUploading = true;
     });
+    Timestamp nowTime = Timestamp.now();
     createPostInFirestore(
       caption: captionControl.text,
       content: contentControl.text,
       target: targetControl.text,
+      nowtime: nowTime,
     );
   }
 
@@ -70,7 +78,7 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
         ? circularProgress()
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.orange[800],
+              backgroundColor: Color(0xff1a2639),
               title: Text(
                 'Make Announcement',
                 style: TextStyle(
@@ -83,13 +91,15 @@ class _AddAnnouncementState extends State<AddAnnouncement> {
             body: SingleChildScrollView(
               child: Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.89,
+                height: 900,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topCenter,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                     colors: [
+                      Colors.cyan[100],
                       Colors.blue[100],
-                      Colors.green[300],
+                      Colors.orange[300],
                     ],
                   ),
                 ),

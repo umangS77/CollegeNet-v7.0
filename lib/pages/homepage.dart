@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collegenet/pages/cabsharing.dart';
+import 'package:collegenet/pages/cabhome.dart';
 import 'package:collegenet/pages/hostevent.dart';
 import 'package:collegenet/pages/profilepage.dart';
 import 'package:collegenet/services/auth.dart';
@@ -10,7 +10,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:collegenet/pages/setupusername.dart';
-
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:line_awesome_icons/line_awesome_icons.dart';
 import '../services/loading.dart';
 import 'announcements.dart';
 
@@ -23,10 +24,10 @@ User currentUser;
 String userId;
 
 class HomePage extends StatefulWidget {
-  HomePage({this.auth, this.onSignedOut});
+  HomePage({this.auth, this.onSignedOut, this.pageIndex});
   final AuthImplementation auth;
   final VoidCallback onSignedOut;
-
+  final int pageIndex;
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -40,9 +41,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // print("1time");
+    pageIndex = widget.pageIndex;
+    print(pageIndex);
     createUserInFirestore();
-    pageController = PageController();
+    pageController = PageController(initialPage: pageIndex);
   }
 
   @override
@@ -94,7 +96,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   onTap(int pageIndex) {
-    pageController.jumpToPage(pageIndex);
+    pageController.animateToPage(pageIndex,
+        duration: Duration(seconds: 1), curve: Curves.fastLinearToSlowEaseIn);
     // pageController.animateToPage(pageIndex,
     // duration: Duration(milliseconds: 500),
     // curve: Curves.easeIn);
@@ -118,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                     onSignedOut: widget.onSignedOut,
                     user: currentUser,
                   ),
-                  CabSharing(
+                  HomeCabs(
                     auth: widget.auth,
                     onSignedOut: widget.onSignedOut,
                     user: currentUser,
@@ -146,8 +149,9 @@ class _HomePageState extends State<HomePage> {
                   BottomNavigationBarItem(icon: Icon(Icons.chrome_reader_mode)),
                   BottomNavigationBarItem(icon: Icon(Icons.event_note)),
                   BottomNavigationBarItem(icon: Icon(Icons.directions_car)),
-                  BottomNavigationBarItem(icon: Icon(Icons.announcement)),
-                  BottomNavigationBarItem(icon: Icon(Icons.person)),
+                  BottomNavigationBarItem(
+                      icon: Icon(LineAwesomeIcons.bullhorn)),
+                  BottomNavigationBarItem(icon: Icon(MaterialIcons.person)),
                 ]));
   }
 }

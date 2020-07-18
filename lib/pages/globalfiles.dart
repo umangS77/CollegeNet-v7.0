@@ -34,9 +34,31 @@ class GlobalFiles extends StatefulWidget {
 }
 
 class _GlobalFilesState extends State<GlobalFiles> {
-  String college = currentUser.college;
+  String college = currentUser.college,
+      category = "All categories",
+      batch = "All Batches";
   bool isLoading = false;
   List<FilePost> posts = [];
+  List<String> categoryList = [
+    'All categories',
+    'Notes',
+    'E-books',
+    'Resource Links',
+    'Repository',
+    'Mess Menu',
+    'Other'
+  ];
+  List<String> batchList = [
+    'All Batches',
+    'UG2K16',
+    'UG2K17',
+    'UG2K18',
+    'UG2K19',
+    'UG2K20',
+    'PG2K18',
+    'PG2K19',
+    'PG2K20',
+  ];
   TextEditingController searchControl = TextEditingController();
   rebuildfileposts() {
     print("working");
@@ -64,8 +86,11 @@ class _GlobalFilesState extends State<GlobalFiles> {
     posts.clear();
     query = query.toLowerCase();
     List<Widget> fileposts = [];
-    List<DocumentSnapshot> list = [], l = snapshot.documents;
-    print("ok2");
+    List<DocumentSnapshot> list = [],
+        l = snapshot.documents,
+        temp = [],
+        temp1 = [];
+    // print("ok2");
     if (query != "") {
       list.clear();
       String cap;
@@ -78,6 +103,20 @@ class _GlobalFilesState extends State<GlobalFiles> {
     } else {
       list = l;
     }
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].data['category'] == category) {
+        temp.add(list[i]);
+      }
+    }
+    if (category != 'All categories') list = temp;
+    // temp.clear();
+    for (var i = 0; i < list.length; i++) {
+      // print(i);
+      if (list[i].data['selectedbatch'].contains(batch)) {
+        temp1.add(list[i]);
+      }
+    }
+    if (batch != 'All Batches') list = temp1;
     print("ok3");
     fileposts.clear();
     for (var i = 0; i < list.length; i++) {
@@ -126,7 +165,7 @@ class _GlobalFilesState extends State<GlobalFiles> {
         // print(posts[i].caption);
       }
     }
-    print("ok4");
+    // print("ok4");
     return Column(
       children: fileposts,
     );
@@ -137,50 +176,56 @@ class _GlobalFilesState extends State<GlobalFiles> {
         context: parentContext,
         builder: (context) {
           return SimpleDialog(
+            contentPadding: EdgeInsets.all(15),
+            // backgroundColor: Color(0xffe2ded3),
             // shape: ShapeBorder().dimensions
-            title: Text("Type of Upload"),
+            title: Center(
+              child: Text(
+                "Type of Upload",
+                style: TextStyle(fontSize: 24, fontFamily: 'Lora'),
+              ),
+            ),
+
             children: <Widget>[
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddGlobalFile(
-                        rebuild: rebuildfileposts,
-                      ),
-                    ),
-                  );
-                },
-                child: Text(
-                  "Add Globally",
-                  style: TextStyle(color: Colors.black),
+              Center(
+                child: SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      _GlobalRoute(),
+                    );
+                  },
+                  child: Text(
+                    "Add Globally",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
                 ),
               ),
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddLocalFile(
-                        rebuild: rebuildfileposts,
-                      ),
-                    ),
-                  );
-                },
-                child: Text(
-                  "Add in College",
-                  style: TextStyle(color: Colors.black),
+              Center(
+                child: SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      _LocalRoute(),
+                    );
+                  },
+                  child: Text(
+                    "Add in College",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
                 ),
               ),
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Cancel",
-                  style: TextStyle(color: Colors.red),
+              Center(
+                child: SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.red, fontSize: 16),
+                  ),
                 ),
               ),
             ],
@@ -243,6 +288,42 @@ class _GlobalFilesState extends State<GlobalFiles> {
     ),
   );
 
+  Route _GlobalRoute() {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => AddGlobalFile(
+              rebuild: rebuildfileposts,
+            ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = Offset(0.0, 1.0);
+          var end = Offset.zero;
+          var curve = Curves.bounceInOut;
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        });
+  }
+
+  Route _LocalRoute() {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => AddLocalFile(
+              rebuild: rebuildfileposts,
+            ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = Offset(0.0, 1.0);
+          var end = Offset.zero;
+          var curve = Curves.bounceInOut;
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -300,10 +381,13 @@ class _GlobalFilesState extends State<GlobalFiles> {
               title: Text('Resource Manager'),
               automaticallyImplyLeading: false,
             ),
-            Divider(),
+            // Divider(),
             ListTile(
-              leading: Icon(Icons.business),
-              title: Text('College Files'),
+              leading: Icon(Icons.business, size: 30),
+              title: Text(
+                'College Files',
+                style: TextStyle(fontSize: 17),
+              ),
               onTap: () {
                 setState(() {
                   pageName = "College Files";
@@ -322,8 +406,11 @@ class _GlobalFilesState extends State<GlobalFiles> {
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.blur_circular),
-              title: Text('Global Files'),
+              leading: Icon(Icons.blur_circular, size: 30),
+              title: Text(
+                'Global Files',
+                style: TextStyle(fontSize: 17),
+              ),
               onTap: () {
                 setState(() {
                   pageName = "Global Files";
@@ -342,8 +429,11 @@ class _GlobalFilesState extends State<GlobalFiles> {
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.library_books),
-              title: Text('My files'),
+              leading: Icon(Icons.library_books, size: 30),
+              title: Text(
+                'My files',
+                style: TextStyle(fontSize: 17),
+              ),
               onTap: () {
                 setState(() {
                   pageName = "My Files";
@@ -367,13 +457,65 @@ class _GlobalFilesState extends State<GlobalFiles> {
           ? circularProgress()
           : Container(
               child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: buildfileposts(init),
-              ),
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            DropdownButton<String>(
+                              items: categoryList.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String selectedOption) {
+                                setState(() {
+                                  this.category = selectedOption;
+                                });
+                              },
+                              value: category,
+                            ),
+                            DropdownButton<String>(
+                              items: batchList.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String selectedOption) {
+                                setState(() {
+                                  this.batch = selectedOption;
+                                });
+                              },
+                              value: batch,
+                            ),
+                          ],
+                        ),
+                      ),
+                      buildfileposts(init),
+                    ],
+                  )),
             ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.black,
+        child: Icon(
+          Icons.add,
+          size: 28,
+        ),
+        backgroundColor: Color(0xf408050a),
         foregroundColor: Colors.orange,
         onPressed: () {
           handlePost(context);

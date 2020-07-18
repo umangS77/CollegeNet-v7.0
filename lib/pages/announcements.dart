@@ -38,6 +38,7 @@ class _AnnouncementsState extends State<Announcements> {
     });
     snapshot = await announcementRef
         .where("college", isEqualTo: currentUser.college)
+        .orderBy('nowtime')
         .getDocuments();
     setState(() {
       isLoading = false;
@@ -56,7 +57,11 @@ class _AnnouncementsState extends State<Announcements> {
     posts.clear();
     query = query.toLowerCase();
     List<Widget> announcementposts = [];
-    List<DocumentSnapshot> list = [], l = snapshot.documents;
+    List<DocumentSnapshot> list = [], l = snapshot.documents, temp = [];
+    for (var i = l.length - 1; i >= 0; i--) {
+      temp.add(l[i]);
+    }
+    l = temp;
     if (query != "") {
       list.clear();
       String cap;
@@ -119,6 +124,25 @@ class _AnnouncementsState extends State<Announcements> {
             ));
   }
 
+  Route _createRoute() {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            AddAnnouncement(
+              rebuild: rebuildannouncements,
+            ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = Offset(0.0, 1.0);
+          var end = Offset.zero;
+          var curve = Curves.bounceInOut;
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -151,11 +175,14 @@ class _AnnouncementsState extends State<Announcements> {
               ),
             ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          size: 28,
+        ),
         backgroundColor: Colors.black,
-        foregroundColor: Colors.orange,
+        // foregroundColor: Color,
         onPressed: () {
-          handlePost(context);
+          Navigator.of(context).push(_createRoute());
         },
       ),
     );
