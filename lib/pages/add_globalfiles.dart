@@ -34,9 +34,17 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
   TextEditingController linkControl = TextEditingController();
   String userId = currentUser.id,
       username = currentUser.username,
-      college = currentUser.college;
+      college = currentUser.college,
+      category = 'Other';
   bool isEmptyTitle = false, isEmptyLink = false, isEmptyDes = false;
-
+  List<String> categoryList = [
+    'Notes',
+    'E-books',
+    'Resource Links',
+    'Repository',
+    'Mess Menu',
+    'Other'
+  ];
   String getExtension(File file) {
     int len = file.path.length;
     int idx = file.path.lastIndexOf('.');
@@ -66,12 +74,14 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
     }
   }
 
-  createPostInFirestore(
-      {String mediaURL,
-      String caption,
-      String content,
-      String fileExtension,
-      bool isFile}) {
+  createPostInFirestore({
+    String mediaURL,
+    String caption,
+    String content,
+    String fileExtension,
+    bool isFile,
+    String category,
+  }) {
     localPostsRef.document(postId).setData({
       "postId": postId,
       "userId": userId,
@@ -84,6 +94,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
       "isFile": isFile,
       "fileExtension": fileExtension,
       "isApproved": false,
+      "category": category,
     });
     userWisePostsRef
         .document(userId)
@@ -101,6 +112,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
       "isLocal": false,
       "fileExtension": fileExtension,
       "isApproved": false,
+      "category": category,
     });
     setState(() {
       file = null;
@@ -129,6 +141,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
           content: contentControl.text,
           fileExtension: getExtension(file),
           isFile: toggleValue,
+          category: category,
         );
       } else {
         setState(() {
@@ -143,6 +156,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
         content: contentControl.text,
         fileExtension: "",
         isFile: toggleValue,
+        category: category,
       );
     }
   }
@@ -283,7 +297,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
                                 ),
                               ),
                             ),
-                      SizedBox(height: 20),
+                      // SizedBox(height: 20),
                       toggleValue
                           ? Center(
                               child: Container(
@@ -297,7 +311,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
                               ),
                             )
                           : Container(),
-                      SizedBox(height: 20),
+                      toggleValue ? SizedBox(height: 20) : Text(''),
                       Container(
                         width: 350.0,
                         height: 100.0,
@@ -317,6 +331,42 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
                             ),
                           ),
                         ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Choose Category: ',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          DropdownButton<String>(
+                            items: categoryList.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(
+                                  item,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String selectedOption) {
+                              setState(() {
+                                this.category = selectedOption;
+                              });
+                            },
+                            value: category,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                       Center(
                         child: ButtonTheme(
@@ -352,7 +402,7 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

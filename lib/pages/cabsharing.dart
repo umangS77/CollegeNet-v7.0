@@ -228,9 +228,12 @@ class _CabSharingState extends State<CabSharing> {
                   )),
             ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          size: 28,
+        ),
         backgroundColor: Colors.black,
-        foregroundColor: Colors.orange,
+        foregroundColor: Colors.amberAccent[400],
         onPressed: () {
           Navigator.push(
             context,

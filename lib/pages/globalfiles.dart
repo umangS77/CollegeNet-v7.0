@@ -137,50 +137,64 @@ class _GlobalFilesState extends State<GlobalFiles> {
         context: parentContext,
         builder: (context) {
           return SimpleDialog(
+            contentPadding: EdgeInsets.all(15),
+            // backgroundColor: Color(0xffe2ded3),
             // shape: ShapeBorder().dimensions
-            title: Text("Type of Upload"),
+            title: Center(
+              child: Text(
+                "Type of Upload",
+                style: TextStyle(fontSize: 24, fontFamily: 'Lora'),
+              ),
+            ),
+
             children: <Widget>[
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddGlobalFile(
-                        rebuild: rebuildfileposts,
+              Center(
+                child: SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddGlobalFile(
+                          rebuild: rebuildfileposts,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child: Text(
-                  "Add Globally",
-                  style: TextStyle(color: Colors.black),
+                    );
+                  },
+                  child: Text(
+                    "Add Globally",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
                 ),
               ),
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddLocalFile(
-                        rebuild: rebuildfileposts,
+              Center(
+                child: SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddLocalFile(
+                          rebuild: rebuildfileposts,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child: Text(
-                  "Add in College",
-                  style: TextStyle(color: Colors.black),
+                    );
+                  },
+                  child: Text(
+                    "Add in College",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
                 ),
               ),
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Cancel",
-                  style: TextStyle(color: Colors.red),
+              Center(
+                child: SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.red, fontSize: 16),
+                  ),
                 ),
               ),
             ],
@@ -300,10 +314,13 @@ class _GlobalFilesState extends State<GlobalFiles> {
               title: Text('Resource Manager'),
               automaticallyImplyLeading: false,
             ),
-            Divider(),
+            // Divider(),
             ListTile(
-              leading: Icon(Icons.business),
-              title: Text('College Files'),
+              leading: Icon(Icons.business, size: 30),
+              title: Text(
+                'College Files',
+                style: TextStyle(fontSize: 17),
+              ),
               onTap: () {
                 setState(() {
                   pageName = "College Files";
@@ -322,8 +339,11 @@ class _GlobalFilesState extends State<GlobalFiles> {
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.blur_circular),
-              title: Text('Global Files'),
+              leading: Icon(Icons.blur_circular, size: 30),
+              title: Text(
+                'Global Files',
+                style: TextStyle(fontSize: 17),
+              ),
               onTap: () {
                 setState(() {
                   pageName = "Global Files";
@@ -342,8 +362,11 @@ class _GlobalFilesState extends State<GlobalFiles> {
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.library_books),
-              title: Text('My files'),
+              leading: Icon(Icons.library_books, size: 30),
+              title: Text(
+                'My files',
+                style: TextStyle(fontSize: 17),
+              ),
               onTap: () {
                 setState(() {
                   pageName = "My Files";
@@ -372,8 +395,11 @@ class _GlobalFilesState extends State<GlobalFiles> {
               ),
             ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.black,
+        child: Icon(
+          Icons.add,
+          size: 28,
+        ),
+        backgroundColor: Color(0xf408050a),
         foregroundColor: Colors.orange,
         onPressed: () {
           handlePost(context);

@@ -151,9 +151,12 @@ class _AnnouncementsState extends State<Announcements> {
               ),
             ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          size: 28,
+        ),
         backgroundColor: Colors.black,
-        foregroundColor: Colors.orange,
+        // foregroundColor: Color,
         onPressed: () {
           handlePost(context);
         },
