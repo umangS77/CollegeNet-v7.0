@@ -113,10 +113,10 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
                                 onPressed: () =>
                                     handleDeleteAnnouncement(context))
                             : IconButton(
-                            icon: Icon(Icons.report),
-                            color: Colors.orange,
-                            onPressed: () =>
-                                handleReportAnnouncement(context)),
+                                icon: Icon(Icons.report),
+                                color: Colors.orange,
+                                onPressed: () =>
+                                    handleReportAnnouncement(context)),
                       ),
                     ),
                     SizedBox(
@@ -172,26 +172,22 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
     widget.rebuild();
   }
 
-  createPostInFirestore(
-      {String ownerId,
-        String postid}) async {
+  createPostInFirestore({String ownerId, String postid}) async {
     String reportid = "Announcements-" + postid + "-" + currentUser.id;
     await reportRef.document(reportid).setData({
       "postid": postid,
       "reportingUserId": currentUser.id,
       "ContentOwnerId": userId,
     });
-    setState(() {
-      reportid = "Announcements-" + postid + "-" + currentUser.id;
-    });
+    // setState(() {
+    //   reportid = "Announcements-" + postid + "-" + currentUser.id;
+    // });
     widget.rebuild();
-    Navigator.pop(context);
+    // Navigator.pop(context);
   }
 
   handleReport() async {
-    setState(() {
-    });
-    createPostInFirestore(
+    await createPostInFirestore(
       postid: widget.postid,
       ownerId: widget.userId,
     );
@@ -253,7 +249,6 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
                   "Yes",
                   style: TextStyle(color: Colors.red),
                 ),
-
               ),
               SimpleDialogOption(
                 onPressed: () {
