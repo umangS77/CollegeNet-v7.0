@@ -17,19 +17,34 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getvalue();
+    });
+  }
+
+  getvalue() async {
+    final eventid = ModalRoute.of(context).settings.arguments as String;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey(eventid) == false) {
+      prefs.setBool(eventid, false);
+    }
+    setState(() {
+      show = prefs.getBool(eventid);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    print(show);
     final eventid = ModalRoute.of(context).settings.arguments as String;
     final loadedEvent =
         Provider.of<Events>(context, listen: false).findById(eventid);
+    loadedEvent.isGoing = show;
+    print(show);
     Future<void> setCount() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool f = prefs.containsKey(loadedEvent.id)
-          ? prefs.getBool(loadedEvent.id)
-          : prefs.setBool(loadedEvent.id, false);
-      print(f);
+      bool f = prefs.getBool(eventid);
+      // print(f);
       await Provider.of<Events>(context).updateCounter(
         loadedEvent.id,
         f,
@@ -37,7 +52,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       );
       prefs.setBool(loadedEvent.id, !prefs.getBool(loadedEvent.id));
       show = prefs.getBool(loadedEvent.id);
-      print(prefs.getBool(loadedEvent.id));
+      // loadedEvent.isGoing = !show;
+      // print(prefs.getBool(loadedEvent.id));
     }
 
     return Scaffold(
