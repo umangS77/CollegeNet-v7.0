@@ -20,6 +20,8 @@ final localPostsRef = Firestore.instance.collection("localPosts");
 final userWisePostsRef = Firestore.instance.collection("userWisePosts");
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final announcementRef = Firestore.instance.collection("announcements");
+final reportRef = Firestore.instance.collection("reports");
+
 User currentUser;
 String userId;
 

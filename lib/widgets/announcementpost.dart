@@ -112,7 +112,11 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
                                 color: Colors.orange,
                                 onPressed: () =>
                                     handleDeleteAnnouncement(context))
-                            : Text(''),
+                            : IconButton(
+                                icon: Icon(Icons.report),
+                                color: Colors.orange,
+                                onPressed: () =>
+                                    handleReportAnnouncement(context)),
                       ),
                     ),
                     SizedBox(
@@ -168,6 +172,36 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
     widget.rebuild();
   }
 
+  createPostInFirestore({String ownerId, String postid}) async {
+    String reportid = "Announcements-" + postid + "-" + currentUser.id;
+    await reportRef.document(reportid).setData({
+      "postid": postid,
+      "reportingUserId": currentUser.id,
+      "ContentOwnerId": userId,
+    });
+    // setState(() {
+    //   reportid = "Announcements-" + postid + "-" + currentUser.id;
+    // });
+    widget.rebuild();
+    // Navigator.pop(context);
+  }
+
+  handleReport() async {
+    await createPostInFirestore(
+      postid: widget.postid,
+      ownerId: widget.userId,
+    );
+  }
+
+  reportAnnouncementPost() async {
+    await announcementRef.document(widget.postid).get().then((doc) {
+      if (doc.exists) {
+        handleReport();
+      }
+    });
+    widget.rebuild();
+  }
+
   handleDeleteAnnouncement(BuildContext parentContext) {
     return showDialog(
         context: parentContext,
@@ -179,6 +213,37 @@ class _AnnouncementPostState extends State<AnnouncementPost> {
                 onPressed: () {
                   Navigator.pop(context);
                   deleteAnnouncementPost();
+                },
+                child: Text(
+                  "Yes",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "No",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  handleReportAnnouncement(BuildContext parentContext) {
+    return showDialog(
+        context: parentContext,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text("Report this announcement ?"),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context);
+                  reportAnnouncementPost();
                 },
                 child: Text(
                   "Yes",
