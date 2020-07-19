@@ -132,11 +132,13 @@ class _NewEventState extends State<NewEvent> {
         _editedEvent.id,
         _editedEvent,
       );
+      Navigator.of(context).pop();
     } else {
       print(_editedEvent.imageURL);
       try {
         await Provider.of<Events>(context, listen: false)
             .addEvent(_editedEvent);
+        Navigator.of(context).pushReplacementNamed('/');
       } catch (error) {
         showDialog(
           context: context,
