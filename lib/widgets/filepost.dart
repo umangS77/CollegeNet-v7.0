@@ -291,10 +291,16 @@ class _FilePostState extends State<FilePost> {
                       ),
                 trailing: isFilePostOwner
                     ? IconButton(
-                        icon: Icon(Icons.more_vert),
+                        icon: Icon(
+                          SimpleLineIcons.options_vertical,
+                          size: 25,
+                        ),
                         onPressed: () => handleDeleteFilePost(context))
                     : IconButton(
-                        icon: Icon(Icons.report),
+                        icon: Icon(
+                          Octicons.report,
+                          size: 25,
+                        ),
                         onPressed: () => handleReportFilePost(context)),
               ),
             ),

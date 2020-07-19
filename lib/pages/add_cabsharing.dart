@@ -49,7 +49,7 @@ class _AddCabState extends State<AddCab> {
       "username": username,
       "source": srcControl.text,
       "destination": destControl.text,
-      "contact": contactControl.text,
+      // "contact": contactControl.text,
       "leavetime": leavetime,
       "count": int.parse(countControl.text),
       "postId": postId,
@@ -255,30 +255,30 @@ class _AddCabState extends State<AddCab> {
                         SizedBox(
                           height: 20,
                         ),
-                        Container(
-                          width: 300.0,
-                          child: TextField(
-                            maxLength: 10,
-                            controller: contactControl,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              WhitelistingTextInputFormatter.digitsOnly
-                            ],
-                            decoration: InputDecoration(
-                              labelText: "Contact Number",
-                              hintText: "82941xxxxx",
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.deepOrangeAccent,
-                                    width: 40.0),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
+                        // Container(
+                        //   width: 300.0,
+                        //   child: TextField(
+                        //     maxLength: 10,
+                        //     controller: contactControl,
+                        //     keyboardType: TextInputType.number,
+                        //     inputFormatters: <TextInputFormatter>[
+                        //       WhitelistingTextInputFormatter.digitsOnly
+                        //     ],
+                        //     decoration: InputDecoration(
+                        //       labelText: "Contact Number",
+                        //       hintText: "82941xxxxx",
+                        //       border: OutlineInputBorder(
+                        //         borderSide: BorderSide(
+                        //             color: Colors.deepOrangeAccent,
+                        //             width: 40.0),
+                        //         borderRadius: BorderRadius.circular(10.0),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: 20,
+                        // ),
                         Container(
                           child: TextField(
                             controller: addnlControl,

@@ -1,6 +1,8 @@
 # collegenet
 
-A new Flutter project.
+A Multipurpose College Utility Application
 
-Announcements Section added...
-Push notification service working
+
+Issues Remaining        
+1. Colleges list is Hardcoded   
+2. Option to edit leaving time is not present   

@@ -520,20 +520,32 @@ class _AddLocalFileState extends State<AddLocalFile> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: RaisedButton(
-                          onPressed: () => handleBatch(context),
-                          child: Text('Select Target Batches'),
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('*Optional'),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: ButtonTheme(
+                              disabledColor: Colors.grey,
+                              buttonColor: Colors.orange[100],
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              child: RaisedButton(
+                                onPressed: () => handleBatch(context),
+                                child: Text('Select Target Batches'),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
                       Center(
                         child: ButtonTheme(
                           disabledColor: Colors.grey,
-                          buttonColor: Colors.orange[100],
+                          buttonColor: Colors.orangeAccent[100],
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0)),
                           child: RaisedButton(
