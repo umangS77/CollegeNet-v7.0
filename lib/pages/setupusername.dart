@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -5,9 +6,12 @@ class CreateAccount extends StatefulWidget {
   _CreateAccountState createState() => _CreateAccountState();
 }
 
+final usersRef = Firestore.instance.collection("users");
+
 class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
   String username, college = 'IIIT-H', batch = 'UG2k15';
+  bool uniqueName = true;
   List<String> collegeList = [
     'IIIT-H',
     'IIT-B',
@@ -35,10 +39,41 @@ class _CreateAccountState extends State<CreateAccount> {
     'PG2K20',
   ];
 
-  submit() {
+  submit() async {
     _formKey.currentState.save();
-    var data = [username, college, batch];
-    Navigator.pop(context, data);
+    await usernamelist(username);
+    print(username);
+    if (uniqueName) {
+      var data = [username, college, batch];
+      Navigator.pop(context, data);
+    }
+  }
+
+  QuerySnapshot snapshot;
+  usernamelist(String name) async {
+    setState(() {
+      uniqueName = true;
+    });
+
+    List<DocumentSnapshot> usernames = snapshot.documents;
+    for (var i = 0; i < usernames.length; i++) {
+      if (usernames[i].data['username'] == name) {
+        setState(() {
+          uniqueName = false;
+        });
+        break;
+      }
+    }
+  }
+
+  buildusername() async {
+    snapshot = await usersRef.getDocuments();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    buildusername();
   }
 
   @override
@@ -80,7 +115,11 @@ class _CreateAccountState extends State<CreateAccount> {
                       child: Column(
                         children: <Widget>[
                           TextFormField(
-                            onSaved: (val) => username = val,
+                            onSaved: (val) {
+                              setState(() {
+                                username = val;
+                              });
+                            },
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: "Username",
@@ -89,6 +128,13 @@ class _CreateAccountState extends State<CreateAccount> {
                             ),
                             maxLength: 14,
                           ),
+                          uniqueName
+                              ? Text('')
+                              : Text(
+                                  'Username is already in use',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.red),
+                                ),
                           SizedBox(
                             height: 12.0,
                           ),

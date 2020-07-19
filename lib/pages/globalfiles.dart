@@ -61,7 +61,7 @@ class _GlobalFilesState extends State<GlobalFiles> {
   ];
   TextEditingController searchControl = TextEditingController();
   rebuildfileposts() {
-    print("working");
+    // print("working");
     switch (status) {
       case PageType.localPage:
         getLocalFileposts();
@@ -75,11 +75,11 @@ class _GlobalFilesState extends State<GlobalFiles> {
       default:
         getLocalFileposts();
     }
-    print("ok here");
+    // print("ok here");
     setState(() {
       init = "";
     });
-    print(snapshot.documents);
+    // print(snapshot.documents);
   }
 
   buildfileposts(String query) {
@@ -117,7 +117,7 @@ class _GlobalFilesState extends State<GlobalFiles> {
       }
     }
     if (batch != 'All Batches') list = temp1;
-    print("ok3");
+    // print("ok3");
     fileposts.clear();
     for (var i = 0; i < list.length; i++) {
       posts.add(FilePost(
@@ -149,14 +149,7 @@ class _GlobalFilesState extends State<GlobalFiles> {
       ));
     } else {
       fileposts.add(SizedBox(
-        height: 20,
-      ));
-      fileposts.add(Text(
-        "Post Count:" + (posts.length).toString(),
-        style: TextStyle(
-          fontFamily: 'Lato',
-          fontSize: 20.0,
-        ),
+        height: 10,
       ));
     }
     for (var i = 0; i < posts.length; i++) {
@@ -193,7 +186,7 @@ class _GlobalFilesState extends State<GlobalFiles> {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      _GlobalRoute(),
+                      _globalRoute(),
                     );
                   },
                   child: Text(
@@ -208,7 +201,7 @@ class _GlobalFilesState extends State<GlobalFiles> {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      _LocalRoute(),
+                      _localRoute(),
                     );
                   },
                   child: Text(
@@ -288,7 +281,7 @@ class _GlobalFilesState extends State<GlobalFiles> {
     ),
   );
 
-  Route _GlobalRoute() {
+  Route _globalRoute() {
     return PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => AddGlobalFile(
               rebuild: rebuildfileposts,
@@ -306,7 +299,7 @@ class _GlobalFilesState extends State<GlobalFiles> {
         });
   }
 
-  Route _LocalRoute() {
+  Route _localRoute() {
     return PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => AddLocalFile(
               rebuild: rebuildfileposts,

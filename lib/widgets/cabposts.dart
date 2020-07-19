@@ -84,25 +84,34 @@ class _CabPostsState extends State<CabPosts> {
         context: parentContext,
         builder: (context) {
           return SimpleDialog(
-            title: Text("Remove this post"),
+            title: Center(
+              child: Text(
+                "Options",
+                style: TextStyle(fontSize: 24, fontFamily: 'Lora'),
+              ),
+            ),
             children: <Widget>[
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.pop(context);
                   deleteFilePost();
                 },
-                child: Text(
-                  "Delete",
-                  style: TextStyle(color: Colors.red),
+                child: Center(
+                  child: Text(
+                    "Delete",
+                    style: TextStyle(fontSize: 16, fontFamily: 'Lora'),
+                  ),
                 ),
               ),
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text(
-                  "Cancel",
-                  style: TextStyle(color: Colors.black),
+                child: Center(
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
             ],
@@ -173,7 +182,7 @@ class _CabPostsState extends State<CabPosts> {
                     //     topLeft: Radius.circular(24),
                     //     topRight: Radius.circular(22)),
                   ),
-                  height: 70.0,
+                  // height: 70.0,
                   width: MediaQuery.of(context).size.width,
                   child: ListTile(
                     leading: Padding(
@@ -272,11 +281,12 @@ class _CabPostsState extends State<CabPosts> {
                 Container(
                   alignment: Alignment.center,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Text("Already Going: " + "  " + count.toString()),
+                      Text("Already Going: " + count.toString()),
                       (currentUser.id == widget.userId)
                           ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
                                 IconButton(
                                   icon: Icon(AntDesign.pluscircleo),
@@ -292,7 +302,7 @@ class _CabPostsState extends State<CabPosts> {
                                     });
                                     widget.rebuild();
                                   },
-                                  iconSize: 20,
+                                  iconSize: 18,
                                 ),
                                 IconButton(
                                   icon: Icon(AntDesign.minuscircleo),
@@ -307,7 +317,7 @@ class _CabPostsState extends State<CabPosts> {
                                     });
                                     widget.rebuild();
                                   },
-                                  iconSize: 20,
+                                  iconSize: 18,
                                 ),
                               ],
                             )

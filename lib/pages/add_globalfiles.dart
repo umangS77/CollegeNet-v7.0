@@ -520,15 +520,24 @@ class _AddGlobalFileState extends State<AddGlobalFile> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: RaisedButton(
-                          onPressed: () => handleBatch(context),
-                          child: Text('Select Target Batches'),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('*Optional'),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: ButtonTheme(
+                              disabledColor: Colors.grey,
+                              buttonColor: Colors.orange[100],
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              child: RaisedButton(
+                                onPressed: () => handleBatch(context),
+                                child: Text('Select Target Batches'),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       Center(
                         child: ButtonTheme(
