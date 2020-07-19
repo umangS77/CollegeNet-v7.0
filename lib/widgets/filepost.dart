@@ -173,26 +173,22 @@ class _FilePostState extends State<FilePost> {
     }
   }
 
-  createPostInFirestore(
-      {String ownerId,
-        String postid}) async {
+  createPostInFirestore({String ownerId, String postid}) async {
     String reportid = "Posts--" + postid + "--" + currentUser.id;
     await reportRef.document(reportid).setData({
       "postid": postid,
       "reportingUserId": currentUser.id,
       "ContentOwnerId": userId,
     });
-    setState(() {
-      reportid = "Announcements--" + postid + "--" + currentUser.id;
-    });
+    // setState(() {
+    //   reportid = "Announcements--" + postid + "--" + currentUser.id;
+    // });
     widget.rebuild();
-    Navigator.pop(context);
+    // Navigator.pop(context);
   }
 
   handleReport() async {
-    setState(() {
-    });
-    createPostInFirestore(
+    await createPostInFirestore(
       postid: widget.postId,
       ownerId: widget.userId,
     );
@@ -223,7 +219,6 @@ class _FilePostState extends State<FilePost> {
                   "Yes",
                   style: TextStyle(color: Colors.red),
                 ),
-
               ),
               SimpleDialogOption(
                 onPressed: () {
@@ -299,8 +294,8 @@ class _FilePostState extends State<FilePost> {
                         icon: Icon(Icons.more_vert),
                         onPressed: () => handleDeleteFilePost(context))
                     : IconButton(
-                    icon: Icon(Icons.report),
-                    onPressed: () => handleReportFilePost(context)),
+                        icon: Icon(Icons.report),
+                        onPressed: () => handleReportFilePost(context)),
               ),
             ),
             SizedBox(
