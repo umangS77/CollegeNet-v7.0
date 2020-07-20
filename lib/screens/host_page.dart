@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collegenet/pages/homepage.dart';
 import 'package:collegenet/services/loading.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -27,6 +28,7 @@ class _NewEventState extends State<NewEvent> {
   int length = 0;
   String eventimageid = Uuid().v4();
   String currentimageurl = "";
+  String ownerid="";
 
   bool isUploading = false;
   bool toggleValue = false;
@@ -44,6 +46,7 @@ class _NewEventState extends State<NewEvent> {
     description: '',
     imageURL: '',
     noOfPraticipants: 0,
+    ownerid: '',
     fee: '',
     startDate: DateTime.now().toString(),
     startTime: DateTime.now().toString(),
@@ -58,6 +61,7 @@ class _NewEventState extends State<NewEvent> {
     'noOfParticipants': '',
     'imageURL': '',
     'startDate': '',
+    'ownerid': '',
     'endDate': '',
     'startTime': '',
     'endTime': '',
@@ -80,7 +84,7 @@ class _NewEventState extends State<NewEvent> {
           'description': _editedEvent.description,
           'imageId': _editedEvent.imageId,
           'fee': _editedEvent.fee.toString(),
-
+          'ownerid': _editedEvent.ownerid,
           'noOfParticipants': _editedEvent.noOfPraticipants.toString(),
           'imageURL': '',
           // 'imageId': _editedEvent.imageId,
@@ -234,6 +238,7 @@ class _NewEventState extends State<NewEvent> {
       createEventinFirestore(imageURL, _initValue['title'], eventimageid);
       _editedEvent = Event2(
         title: _editedEvent.title,
+        ownerid: currentUser.id,
         imageId: _editedEvent.imageId,
         description: _editedEvent.description,
         imageURL: imageURL,
@@ -299,6 +304,7 @@ class _NewEventState extends State<NewEvent> {
                           onSaved: (value) {
                             _editedEvent = Event2(
                               title: value,
+                              ownerid: currentUser.id,
                               description: _editedEvent.description,
                               imageId: eventimageid,
                               imageURL: _editedEvent.imageURL,
@@ -335,6 +341,7 @@ class _NewEventState extends State<NewEvent> {
                           onSaved: (value) {
                             _editedEvent = Event2(
                               title: _editedEvent.title,
+                              ownerid: currentUser.id,
                               imageId: eventimageid,
                               description: _editedEvent.description,
                               imageURL: _editedEvent.imageURL,
@@ -364,6 +371,7 @@ class _NewEventState extends State<NewEvent> {
                           onSaved: (value) {
                             _editedEvent = Event2(
                               title: _editedEvent.title,
+                              ownerid: currentUser.id,
                               description: value,
                               imageId: eventimageid,
                               imageURL: _editedEvent.imageURL,
@@ -387,6 +395,7 @@ class _NewEventState extends State<NewEvent> {
                           onSaved: (value) {
                             _editedEvent = Event2(
                               title: _editedEvent.title,
+                              ownerid: currentUser.id,
                               description: _editedEvent.description,
                               imageURL: _editedEvent.imageURL,
                               imageId: eventimageid,
@@ -472,6 +481,7 @@ class _NewEventState extends State<NewEvent> {
                               onSaved: (value) {
                                 _editedEvent = Event2(
                                   title: _editedEvent.title,
+                                  ownerid: currentUser.id,
                                   description: _editedEvent.description,
                                   imageURL: _editedEvent.imageURL,
                                   imageId: eventimageid,
@@ -504,6 +514,7 @@ class _NewEventState extends State<NewEvent> {
                               onSaved: (value) {
                                 _editedEvent = Event2(
                                   title: _editedEvent.title,
+                                  ownerid: currentUser.id,
                                   description: _editedEvent.description,
                                   imageURL: _editedEvent.imageURL,
                                   imageId: eventimageid,

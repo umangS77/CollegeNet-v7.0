@@ -34,6 +34,7 @@ class Events with ChangeNotifier {
           noOfPraticipants: prodData['noOfPraticipants'],
           fee: prodData['fee'],
           startDate: prodData['startDate'],
+          ownerid: prodData['ownerid'],
           // endDate: prodData['endDate'],
           startTime: prodData['startTime'],
           // endTime: prodData['endTime'],
@@ -57,7 +58,7 @@ class Events with ChangeNotifier {
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Event2> loadedEvents = [];
       extractedData.forEach((prodId, prodData) {
-        if (prodId == currentUser.id)
+        if (prodData['ownerid'] == currentUser.id)
           loadedEvents.add(Event2(
             id: prodId,
             imageId: prodData['imageId'],
@@ -65,6 +66,7 @@ class Events with ChangeNotifier {
             // imageId: prodData['imageId'],
             noOfPraticipants: prodData['noOfPraticipants'],
             fee: prodData['fee'],
+            ownerid: prodData['ownerid'],
             startDate: prodData['startDate'],
             startTime: prodData['startTime'],
             isGoing: false,
@@ -117,6 +119,7 @@ class Events with ChangeNotifier {
         body: json.encode({
           'title': evnt.title,
           'imageId': evnt.imageId,
+          'ownerid': evnt.ownerid,
           'description': evnt.description,
           'noOfPraticipants': evnt.noOfPraticipants,
           'imageURL': evnt.imageURL,
@@ -133,6 +136,7 @@ class Events with ChangeNotifier {
         imageId: evnt.imageId,
         description: evnt.description,
         fee: evnt.fee,
+        ownerid: evnt.ownerid,
         id: json.decode(response.body)['name'],
         imageURL: evnt.imageURL,
         noOfPraticipants: evnt.noOfPraticipants,
@@ -157,6 +161,7 @@ class Events with ChangeNotifier {
       http.patch(url,
           body: json.encode({
             'title': newEvent.title,
+            'ownerid': newEvent.ownerid,
             'imageId': newEvent.imageId,
             'description': newEvent.description,
             'imageURL': newEvent.imageURL,
@@ -181,6 +186,7 @@ class Events with ChangeNotifier {
         body: json.encode(
           {
             'title': newEvent.title,
+            'ownerid': newEvent.ownerid,
             'description': newEvent.description,
             'imageURL': newEvent.imageURL,
             'startDate': newEvent.startDate,
@@ -196,6 +202,7 @@ class Events with ChangeNotifier {
         title: newEvent.title,
         description: newEvent.description,
         fee: newEvent.fee,
+        ownerid: newEvent.ownerid,
         id: newEvent.id,
         imageURL: newEvent.imageURL,
         noOfPraticipants: newEvent.noOfPraticipants,

@@ -9,12 +9,14 @@ class Event2 with ChangeNotifier {
   final String imageURL;
   final int noOfPraticipants;
   final String fee;
+  final String ownerid;
   String startDate;
   String startTime;
   final int count;
   bool isGoing;
   Event2({
     @required this.id,
+    @required this.ownerid,
     @required this.imageId,
     @required this.title,
     @required this.description,
