@@ -7,7 +7,6 @@ import '../screens/event_detail.dart';
 import '../providers/events.dart';
 import '../screens/host_page.dart';
 import '../screens/users_events_screen.dart';
-import '../screens/chat_screen.dart';
 
 class HostEvent extends StatefulWidget {
   static const routeName = '/evnthome';
@@ -50,7 +49,6 @@ class _HostEventState extends State<HostEvent> {
         ),
         home: EventOverview(),
         routes: {
-          EventOverview.routeName: (ctx) => EventOverview(),
           EventDetailScreen.routeName: (ctx) => EventDetailScreen(),
           NewEvent.routeName: (ctx) => NewEvent(),
           UserEventsScreen.routeName: (ctx) => UserEventsScreen(),

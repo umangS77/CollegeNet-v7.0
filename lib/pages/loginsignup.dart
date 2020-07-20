@@ -153,7 +153,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                   visibleMessage
                       ? SizedBox(height: 20)
                       : SizedBox(
-                          height: 70,
+                          height: 40,
                         ),
                   // logo(),
                   Padding(

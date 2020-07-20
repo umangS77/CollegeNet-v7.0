@@ -17,19 +17,34 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getvalue();
+    });
+  }
+
+  getvalue() async {
+    final eventid = ModalRoute.of(context).settings.arguments as String;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey(eventid) == false) {
+      prefs.setBool(eventid, false);
+    }
+    setState(() {
+      show = prefs.getBool(eventid);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    // print(show);
     final eventid = ModalRoute.of(context).settings.arguments as String;
     final loadedEvent =
         Provider.of<Events>(context, listen: false).findById(eventid);
+    loadedEvent.isGoing = show;
+    // print(show);
     Future<void> setCount() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool f = prefs.containsKey(loadedEvent.id)
-          ? prefs.getBool(loadedEvent.id)
-          : prefs.setBool(loadedEvent.id, false);
-      print(f);
+      bool f = prefs.getBool(eventid);
+      // print(f);
       await Provider.of<Events>(context).updateCounter(
         loadedEvent.id,
         f,
@@ -37,7 +52,10 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       );
       prefs.setBool(loadedEvent.id, !prefs.getBool(loadedEvent.id));
       show = prefs.getBool(loadedEvent.id);
-      print(prefs.getBool(loadedEvent.id));
+      print(loadedEvent.fee);
+      // print("enter");
+      // loadedEvent.isGoing = !show;
+      // print(prefs.getBool(loadedEvent.id));
     }
 
     return Scaffold(
@@ -188,34 +206,39 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   height: 30,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    InkWell(
-                      onTap: () async {
-                        if (await canLaunch(loadedEvent.fee)) {
-                          await launch(loadedEvent.fee);
-                        } else {
-                          throw 'Could not launch ${loadedEvent.fee}';
-                        }
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 2 / 5,
-                        height: 60,
-                        margin: EdgeInsets.only(
-                          top: 30,
-                          left: 30,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "REGISTER",
-                            style: TextStyle(color: Colors.white),
+                    if (loadedEvent.fee != "https://")
+                      InkWell(
+                        onTap: () async {
+                          String url = loadedEvent.fee;
+                          if (!url.startsWith("http")) url = "https://" + url;
+                          print(url);
+                          if (await canLaunch(url)) {
+                            await launch(url);
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 2 / 5,
+                          height: 60,
+                          // margin: EdgeInsets.only(
+                          //   top: 30,
+                          //   left: 30,
+                          // ),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "REGISTER",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
-                    ),
                     InkWell(
                       onTap: () async {
                         // print("adwdaw");
@@ -224,19 +247,17 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                       child: Container(
                         width: MediaQuery.of(context).size.width * 2 / 5,
                         height: 60,
-                        margin: EdgeInsets.only(
-                          top: 30,
-                          left: 20,
-                        ),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         child: Center(
-                          child: Text(
-                            "JOIN EVENT",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          child: loadedEvent.isGoing
+                              ? Text('LEAVE EVENT')
+                              : Text(
+                                  "JOIN EVENT",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                         ),
                       ),
                     )
