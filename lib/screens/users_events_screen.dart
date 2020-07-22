@@ -12,7 +12,9 @@ class UserEventsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _refreshEvents(context);
     final evntsData = Provider.of<Events>(context);
+    _refreshEvents(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Events hosted by you'),
