@@ -74,7 +74,7 @@ class EventItem extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 130,
+              width: 105,
             ),
             Container(
               margin: EdgeInsets.only(left: 10),
