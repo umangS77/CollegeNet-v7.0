@@ -247,7 +247,7 @@ class _CabPostsState extends State<CabPosts> {
                           Container(
                               padding: const EdgeInsets.all(2),
                               decoration: BoxDecoration(border: Border.all()),
-                              child: Text(widget.source)),
+                              child: Text("From: " + widget.source)),
                           SizedBox(
                             height: 30,
                           ),
@@ -255,7 +255,7 @@ class _CabPostsState extends State<CabPosts> {
                               padding: const EdgeInsets.all(2),
                               decoration: BoxDecoration(border: Border.all()),
                               child: Text(
-                                widget.destination,
+                                "To: " + widget.destination,
                               )),
                         ],
                       )),
