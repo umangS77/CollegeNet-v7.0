@@ -298,7 +298,7 @@ class _FilePostState extends State<FilePost> {
                         onPressed: () => handleDeleteFilePost(context))
                     : IconButton(
                         icon: Icon(
-                          Octicons.report,
+                          Icons.report,
                           size: 25,
                         ),
                         onPressed: () => handleReportFilePost(context)),
